@@ -1,9 +1,19 @@
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import './models/Channel';
+import './models/Message';
+import './models/User';
 import app from './app';
 
 dotenv.config({ path: 'variables.env' });
 
-app.set('port', process.env.PORT || 7777);
+mongoose.connect(
+  process.env.DATABASE,
+  { useNewUrlParser: true }
+);
+
+app.set('port', process.env.PORT || 8080);
+
 const server = app.listen(app.get('port'), () => {
   console.log(`server is running on ${server.address().port}`);
 });

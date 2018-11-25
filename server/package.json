@@ -2,7 +2,7 @@
   "name": "mini-slack-api",
   "version": "0.1.0",
   "description": "",
-  "main": "start.js",
+  "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/start.js"
   },
@@ -12,7 +12,8 @@
     "cors": "^2.8.5",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
-    "helmet": "^3.15.0"
+    "helmet": "^3.15.0",
+    "mongoose": "^5.3.13"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
