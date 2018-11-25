@@ -7,10 +7,8 @@ export async function getMessages(req, res) {
 }
 
 export async function getMessage(req, res) {
-  const message = await Message.find({ id: req.params.id });
-  if (!message) {
-    return res.status(404).send('Not found');
-  }
+  const message = await Message.find({ _id: req.params.id });
+  if (!message) return res.status(404).send('the message with the given id was not found');
   res.json(message);
 }
 

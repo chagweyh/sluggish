@@ -1,7 +1,14 @@
 import React from 'react';
+import Sidebar from './Sidebar';
+import ContentArea from './ContentArea';
 
 function App() {
-  return <div>Hi!</div>;
+  return (
+    <React.Fragment>
+      <Sidebar />
+      <ContentArea />
+    </React.Fragment>
+  );
 }
 
 export default App;

@@ -7,7 +7,8 @@ export async function getUsers(req, res) {
 }
 
 export async function getUser(req, res) {
-  const user = await User.find({ id: req.params.id });
+  const user = await User.find({ _id: req.params.id });
+  if (!user) return res.status(404).send('the user with the given id was not found');
   res.json(user);
 }
 
