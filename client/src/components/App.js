@@ -1,13 +1,13 @@
 import React from 'react';
 import Sidebar from './Sidebar';
-import ContentArea from './ContentArea';
+import Content from './Content';
 
 function App() {
   return (
-    <React.Fragment>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
-      <ContentArea />
-    </React.Fragment>
+      <Content />
+    </div>
   );
 }
 

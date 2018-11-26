@@ -4,7 +4,14 @@ import People from './People';
 
 function Sidebar() {
   return (
-    <div>
+    <div
+      style={{
+        width: '17%',
+        padding: '15px',
+        backgroundColor: '#3b5998',
+        color: '#fff',
+      }}
+    >
       <Channels />
       <People />
     </div>
