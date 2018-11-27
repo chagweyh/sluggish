@@ -2,7 +2,7 @@ import React from 'react';
 import Channels from './Channels';
 import People from './People';
 
-function Sidebar() {
+function Sidebar(props) {
   return (
     <div
       style={{
@@ -12,7 +12,11 @@ function Sidebar() {
         color: '#fff',
       }}
     >
-      <Channels />
+      <Channels
+        channels={props.channels}
+        currentChannel={props.currentChannel}
+        handleCurrentChannelChange={props.handleCurrentChannelChange}
+      />
       <People />
     </div>
   );

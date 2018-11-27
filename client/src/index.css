@@ -17,7 +17,6 @@ li {
   padding: 4px;
 }
 
-li:hover,
 li.active {
   background: #f1c40f;
   color: #000;
@@ -39,6 +38,11 @@ input {
   border-radius: 0.25rem;
   box-sizing: border-box;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.messages {
+  padding: 0 20px;
+  overflow-y: auto;
 }
 
 .message {

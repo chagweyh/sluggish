@@ -25,6 +25,6 @@ router.post('/channel', addChannel);
  **/
 router.get('/messages', getMessages);
 router.get('/messages/:id', getMessage);
-router.post('/message', addMessage);
+router.post('/messages', addMessage);
 
 export default router;

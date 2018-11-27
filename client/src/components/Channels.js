@@ -1,14 +1,19 @@
 import React from 'react';
 
-function Channels() {
+function Channels(props) {
   return (
     <div>
       <h3>Channels</h3>
       <ul>
-        <li># Channel1</li>
-        <li># Channel2</li>
-        <li># Channel3</li>
-        <li># Channel4</li>
+        {props.channels.map(channel => (
+          <li
+            key={channel}
+            className={channel === props.currentChannel ? 'active' : ''}
+            onClick={() => props.handleCurrentChannelChange(channel)}
+          >
+            # {channel}
+          </li>
+        ))}
       </ul>
     </div>
   );

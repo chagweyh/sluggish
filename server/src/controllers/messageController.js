@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 const Message = mongoose.model('Message');
 
 export async function getMessages(req, res) {
-  const messages = await Message.find();
+  const messages = await Message.find()
+    .populate('author')
+    .populate('channel');
   res.json(messages);
 }
 
@@ -16,4 +18,5 @@ export async function addMessage(req, res) {
   const message = new Message(req.body);
   await message.save();
   res.json(message);
+  // console.log(req.body);
 }
