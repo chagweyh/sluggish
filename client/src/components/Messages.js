@@ -1,6 +1,11 @@
 import React from 'react';
 
+<<<<<<< HEAD
 function Messages() {
+=======
+function Messages(props) {
+  const messages = props.messages || [];
+>>>>>>> add-state
   return (
     <div
       style={{
@@ -8,6 +13,7 @@ function Messages() {
         overflowY: 'auto',
       }}
     >
+<<<<<<< HEAD
       <div className="message">
         <div className="user-img">
           <img src="https://avatars0.githubusercontent.com/u/23120626?s=400&v=4" alt="user" />
@@ -96,6 +102,23 @@ function Messages() {
           <p className="message-text">A Message from Mourad</p>
         </div>
       </div>
+=======
+      {messages.map(message => (
+        <div key={message.id} className="message">
+          <div className="user-img">
+            <img
+              src={message.img ? message.img : 'https://avatars0.githubusercontent.com/u/23120626?s=400&v=4'}
+              alt={message.author + ' image'}
+            />
+          </div>
+          <div className="message-info">
+            <span className="user-name">{message.author}</span>
+            <span className="message-date">{message.date.toString()}</span>
+            <p className="message-text">{message.text}</p>
+          </div>
+        </div>
+      ))}
+>>>>>>> add-state
     </div>
   );
 }
