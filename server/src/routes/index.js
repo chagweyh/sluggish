@@ -1,15 +1,21 @@
 import express from 'express';
 const router = express.Router();
-import { getUsers, getUser, addUser } from '../controllers/userController';
+import { getUsers, getUser, signup } from '../controllers/userController';
+import { signin, signout, isLoggedIn } from '../controllers/authController';
 import { getChannels, getChannel, addChannel } from '../controllers/channelController';
 import { getMessages, getMessage, addMessage } from '../controllers/messageController';
 
 /**
+ * Authentication Router
+ **/
+router.post('/signin', signin);
+router.post('/signout', signout);
+/**
  * Users Routes
  **/
-router.get('/users', getUsers);
+router.get('/users', isLoggedIn, getUsers);
 router.get('/users/:id', getUser);
-router.post('/user', addUser);
+router.post('/signup', signup);
 
 /**
  * Channels Routes

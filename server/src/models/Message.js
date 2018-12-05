@@ -1,19 +1,40 @@
 import mongoose from 'mongoose';
+import Joi from 'joi';
 
 const messageSchema = new mongoose.Schema({
-  text: String,
-  channel: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Channel',
+  text: {
+    type: String,
+    required: true,
   },
   author: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
+    required: true,
   },
-  created: {
+  channel: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Channel',
+    required: true,
+  },
+  createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-export default mongoose.model('Message', messageSchema);
+const Message = mongoose.model('Message', messageSchema);
+
+const validateMessage = message => {
+  const schema = {
+    text: Joi.string()
+      .min(2)
+      .max(50)
+      .required(),
+    author: Joi.objectId().required(),
+    channel: Joi.objectId().required(),
+  };
+
+  return Joi.validate(message, schema);
+};
+
+export { Message, validateMessage as validate };

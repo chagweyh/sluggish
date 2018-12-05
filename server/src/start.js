@@ -1,25 +1,24 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import socket from 'socket.io';
-import './models/Channel';
-import './models/Message';
-import './models/User';
-import app from './app';
 
 dotenv.config({ path: 'variables.env' });
 
+mongoose.set('useCreateIndex', true);
 mongoose.connect(
   process.env.DATABASE,
   { useNewUrlParser: true }
 );
+mongoose.connection.on('error', err => {
+  console.error(err.message);
+});
 
+// import './models/Channel';
+// import './models/Message';
+// import './models/User';
+
+import app from './app';
 app.set('port', process.env.PORT || 8080);
 
 const server = app.listen(app.get('port'), () => {
   console.log(`server is running on ${server.address().port}`);
-});
-
-const io = socket(server);
-io.on('connection', socket => {
-  console.log('made socket connection', socket.id);
 });

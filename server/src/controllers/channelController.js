@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const Channel = mongoose.model('Channel');
+import { Channel, validate } from '../models/Channel';
 
 export async function getChannels(req, res) {
   const channels = await Channel.find();

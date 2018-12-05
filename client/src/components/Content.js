@@ -1,12 +1,12 @@
 import React from 'react';
 import Messages from './Messages';
-import Input from './Input';
+import MessageInput from './MessageInput';
 
 function Content(props) {
   return (
     <div style={{ width: '83%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
       <Messages messages={props.messages} />
-      <Input currentChannel={props.currentChannel} addMessage={props.addMessage} />
+      <MessageInput currentChannel={props.currentChannel} addMessage={props.addMessage} />
     </div>
   );
 }

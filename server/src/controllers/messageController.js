@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const Message = mongoose.model('Message');
+import { Message, validate } from '../models/Message';
 
 export async function getMessages(req, res) {
   const messages = await Message.find()

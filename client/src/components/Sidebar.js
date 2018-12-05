@@ -8,7 +8,7 @@ function Sidebar(props) {
       style={{
         width: '17%',
         padding: '15px',
-        backgroundColor: '#3b5998',
+        backgroundColor: '#2185d0',
         color: '#fff',
       }}
     >
