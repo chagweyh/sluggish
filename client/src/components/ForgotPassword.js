@@ -18,9 +18,9 @@ function Reset() {
             </Button>
           </Segment>
         </Form>
-        <Message>
+        <Segment secondary>
           <Link to="/">I remember my password</Link>
-        </Message>
+        </Segment>
       </FormWrapper>
     </FormContainer>
   );

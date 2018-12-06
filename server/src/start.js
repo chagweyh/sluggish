@@ -12,10 +12,6 @@ mongoose.connection.on('error', err => {
   console.error(err.message);
 });
 
-// import './models/Channel';
-// import './models/Message';
-// import './models/User';
-
 import app from './app';
 app.set('port', process.env.PORT || 8080);
 

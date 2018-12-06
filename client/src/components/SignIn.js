@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Header, Message, Segment, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormContainer, FormWrapper } from './styles/Form';
 
@@ -19,10 +19,16 @@ function SignIn() {
             </Button>
           </Segment>
         </Form>
-        <Message>
-          New to us? &nbsp;<Link to="/signup">Sign up</Link>
-          <Link to="/forgot-password">Forgot Password ?</Link>
-        </Message>
+        <Segment secondary>
+          <Grid>
+            <Grid.Column floated="left" width={6}>
+              New to us? &nbsp;<Link to="/signup">Sign up</Link>
+            </Grid.Column>
+            <Grid.Column floated="right" width={6}>
+              <Link to="/forgot-password">Forgot Password ?</Link>
+            </Grid.Column>
+          </Grid>
+        </Segment>
       </FormWrapper>
     </FormContainer>
   );
