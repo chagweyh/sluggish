@@ -1,16 +1,19 @@
 import React from 'react';
+// import { List } from 'semantic-ui-react';
+import { Box, BoxHeader } from './styles/Box';
+import { List, ListItem } from './styles/List';
 
 function People() {
   return (
-    <div>
-      <h3>People</h3>
-      <ul>
-        <li>Person1</li>
-        <li>Person2</li>
-        <li>Person3</li>
-        <li>Person4</li>
-      </ul>
-    </div>
+    <Box>
+      <BoxHeader>Direct Message</BoxHeader>
+      <List>
+        <ListItem>Person1</ListItem>
+        <ListItem>Person2</ListItem>
+        <ListItem>Person3</ListItem>
+        <ListItem>Person4</ListItem>
+      </List>
+    </Box>
   );
 }
 

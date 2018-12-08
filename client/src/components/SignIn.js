@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Button, Form, Header, Message, Segment, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormContainer, FormWrapper } from './styles/Form';
+import { getCurrentUser } from '../services/authService';
 
 function SignIn() {
+  if (getCurrentUser()) return <Redirect to="/chat" />;
   return (
     <FormContainer>
       <FormWrapper>

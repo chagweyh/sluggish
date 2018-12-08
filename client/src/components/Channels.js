@@ -1,21 +1,23 @@
 import React from 'react';
+import { List, ListItem } from './styles/List';
+import { Box, BoxHeader } from './styles/Box';
 
-function Channels(props) {
+function Channels({ currentChannel, channels, handleCurrentChannelChange }) {
   return (
-    <div>
-      <h3>Channels</h3>
-      <ul>
-        {props.channels.map(channel => (
-          <li
+    <Box>
+      <BoxHeader>Channels</BoxHeader>
+      <List>
+        {channels.map(channel => (
+          <ListItem
             key={channel}
-            className={channel === props.currentChannel ? 'active' : ''}
-            onClick={() => props.handleCurrentChannelChange(channel)}
+            active={channel === currentChannel}
+            onClick={() => handleCurrentChannelChange(channel)}
           >
             # {channel}
-          </li>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   );
 }
 

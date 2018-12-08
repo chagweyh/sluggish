@@ -24,8 +24,8 @@ function Chat() {
     axios
       .get('/api/channels')
       .then(res => res.data)
-      .then(channelsData => {
-        channelsData.forEach(channel => dispatch({ type: 'add_channel', name: channel.name }));
+      .then(channels => {
+        channels.forEach(channel => dispatch({ type: 'add_channel', name: channel.name }));
       });
   }, []);
 

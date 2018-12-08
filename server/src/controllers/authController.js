@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 
-export async function signin(req, res) {
+async function signin(req, res) {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -17,13 +17,13 @@ export async function signin(req, res) {
   res.send(token);
 }
 
-export async function signout(req, res) {
+async function signout(req, res) {
   const user = new User(req.body);
   await user.save();
   res.json(user);
 }
 
-export async function isLoggedIn(req, res, next) {
+async function isLoggedIn(req, res, next) {
   const token = req.header('x-auth-token');
   if (!token) return res.status(401).send('Access denied. No token provided');
   try {
@@ -50,3 +50,5 @@ const validate = user => {
 
   return Joi.validate(user, schema);
 };
+
+export { signin, signout, isLoggedIn };

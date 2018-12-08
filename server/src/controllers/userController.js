@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { User, validate } from '../models/User';
 
-export async function signup(req, res) {
+async function signup(req, res) {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -17,13 +17,15 @@ export async function signup(req, res) {
   res.header('x-auth-token', token).send({ _id, username, email, gravatar });
 }
 
-export async function getUsers(req, res) {
-  const users = await User.find();
-  res.json(users);
-}
-
-export async function getUser(req, res) {
+async function getUser(req, res) {
   const user = await User.find({ _id: req.params.id });
   if (!user) return res.status(404).send('the user with the given id was not found');
   res.json(user);
 }
+
+async function getUsers(req, res) {
+  const users = await User.find();
+  res.json(users);
+}
+
+export { signup, getUser, getUsers };

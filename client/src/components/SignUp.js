@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
-import { Button, Form, Header, Segment } from 'semantic-ui-react';
+import { Button, Form, Header, Segment, Loader } from 'semantic-ui-react';
 import { FormContainer, FormWrapper } from './styles/Form';
 import Errors from './Errors';
+import axios from 'axios';
 
 function SignUp() {
   const [form, setValues] = useState({
@@ -11,7 +12,8 @@ function SignUp() {
     email: '',
     password: '',
   });
-  const [validationErrors, setValidationErrors] = useState(null);
+  const [errors, setErrors] = useState(null);
+  // const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     setValues({
@@ -43,10 +45,11 @@ function SignUp() {
     try {
       await schema.validate(form, { abortEarly: false });
     } catch ({ inner }) {
+      // console.log(inner);
       return inner.reduce(
         (errors, error) => ({
           ...errors,
-          [error.path]: error.message,
+          [`${error.name}-${error.path}`]: error.message,
         }),
         {}
       );
@@ -55,11 +58,21 @@ function SignUp() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    const validationErrors = await validateForm();
+    setErrors(validationErrors);
+    if (validationErrors) return;
+
     try {
-      const errors = await validateForm();
-      setValidationErrors(errors);
-    } catch (err) {
-      console.log(err);
+      const response = await axios.post('/api/signup', form);
+      console.log(response);
+      localStorage.setItem('token', response.headers['x-auth-token']);
+
+      window.location = '/chat';
+    } catch (error) {
+      // console.log(error.response.data);
+      // console.log({ ...error });
+      const { statusText, data } = error.response;
+      setErrors({ [statusText]: data });
     }
   };
 
@@ -69,7 +82,7 @@ function SignUp() {
         <Header as="h2" color="blue">
           Create a new account
         </Header>
-        <Form onSubmit={handleSubmit}>
+        <Form autoComplete="off" onSubmit={handleSubmit}>
           <Segment stacked>
             <Form.Input
               fluid
@@ -101,11 +114,12 @@ function SignUp() {
               onChange={handleChange}
             />
             <Button color="blue" fluid size="large">
+              {/* {loading ? <Loader active inline="centered" /> : 'Sign up'} */}
               Sign up
             </Button>
           </Segment>
         </Form>
-        {validationErrors && <Errors errors={validationErrors} />}
+        {errors && <Errors errors={errors} />}
         <Segment secondary>
           Already have an account? &nbsp;<Link to="/">Sign in</Link>
         </Segment>
