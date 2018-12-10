@@ -1,12 +1,11 @@
 import React from 'react';
-// import { List } from 'semantic-ui-react';
-import { Box, BoxHeader } from './styles/Box';
+import { Box } from './styles/Box';
 import { List, ListItem } from './styles/List';
 
 function People() {
   return (
     <Box>
-      <BoxHeader>Direct Message</BoxHeader>
+      <h3>Direct Message</h3>
       <List>
         <ListItem>Person1</ListItem>
         <ListItem>Person2</ListItem>

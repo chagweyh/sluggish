@@ -1,13 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Image } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Channels from './Channels';
 import People from './People';
+import { getCurrentUser } from '../services/authService';
 
 const trigger = (
   <span>
-    <Image avatar src={'https://avatars0.githubusercontent.com/u/23120626?s=400&v=4'} /> {'Haythem Chagwey'}
+    <Image avatar src={getCurrentUser() && getCurrentUser().data.gravatar} />{' '}
+    {getCurrentUser() && getCurrentUser().data.username}
+    {/* <Image avatar src={getCurrentUser().data.gravatar} /> {getCurrentUser().data.username} */}
   </span>
 );
 
@@ -25,6 +28,7 @@ const StyledSideBar = styled.div`
 `;
 
 function Sidebar(props) {
+  // console.log(getCurrentUser());
   return (
     <StyledSideBar>
       <Dropdown trigger={trigger} options={options} />

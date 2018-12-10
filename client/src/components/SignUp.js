@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
-import { Button, Form, Header, Segment, Loader } from 'semantic-ui-react';
+import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { FormContainer, FormWrapper } from './styles/Form';
 import Errors from './Errors';
 import axios from 'axios';

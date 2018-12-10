@@ -18,9 +18,7 @@ async function signin(req, res) {
 }
 
 async function signout(req, res) {
-  const user = new User(req.body);
-  await user.save();
-  res.json(user);
+  res.json({ msg: 'Signed out!' });
 }
 
 async function isLoggedIn(req, res, next) {

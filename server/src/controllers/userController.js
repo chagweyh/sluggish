@@ -9,6 +9,7 @@ async function signup(req, res) {
   if (user) return res.status(400).send('user already exists!');
 
   user = new User(req.body);
+  user.email = user.email.toLowerCase();
   user.password = await bcrypt.hash(user.password, 10);
   await user.save();
 

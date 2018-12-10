@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { getCurrentUser } from '../services/authService';
 import Sidebar from './Sidebar';
 import Content from './Content';
 
@@ -31,6 +33,7 @@ function Chat() {
 
   const messages = (channels && channels[currentChannel]) || [];
 
+  if (!getCurrentUser()) return <Redirect to="/" />;
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar
