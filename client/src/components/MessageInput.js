@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input } from 'semantic-ui-react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { getCurrentUser } from '../services/authService';
 
 function generateId() {
   return Math.random()
@@ -29,14 +30,23 @@ function MessageInput(props) {
       // });
       axios.post('/api/messages', {
         text,
-        author: 'Me',
-        channel: props.currentChannel,
+        author: getCurrentUser().data._id,
+        // channel: props.currentChannel,
+        channel: '5c0f746143fe7e3258bee010',
       });
       setText('');
     }
   }
   return (
-    <StyledInput placeholder="Type your message here. Press Enter to send" />
+    // <StyledInput placeholder="Type your message here. Press Enter to send" />
+    <StyledInput
+      name="text"
+      type="text"
+      value={text}
+      onChange={e => setText(e.target.value)}
+      placeholder="Type your message here. Press Enter to send"
+      onKeyPress={handleKeyPress}
+    />
     //   <div style={{ padding: '9px', borderTop: '1px solid #e8e4e4' }}>
     //   <input
     //     name="text"

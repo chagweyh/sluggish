@@ -20,7 +20,21 @@ const messageSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  readBy: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
+
+function autopopulate(next) {
+  this.populate('author', 'username _id');
+  next();
+}
+
+messageSchema.pre('findOne', autopopulate);
+messageSchema.pre('find', autopopulate);
 
 const Message = mongoose.model('Message', messageSchema);
 

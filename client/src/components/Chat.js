@@ -27,6 +27,7 @@ function Chat() {
       .get('/api/channels')
       .then(res => res.data)
       .then(channels => {
+        console.log(channels);
         channels.forEach(channel => dispatch({ type: 'add_channel', name: channel.name }));
       });
   }, []);

@@ -3,7 +3,7 @@ const router = express.Router();
 import { signup, getUser, getUsers } from '../controllers/userController';
 import { signin, signout, isLoggedIn } from '../controllers/authController';
 import { getChannels, getChannel, addChannel } from '../controllers/channelController';
-import { getMessages, getMessage, addMessage } from '../controllers/messageController';
+import { addMessage } from '../controllers/messageController';
 
 /**
  * Authentication Router
@@ -24,15 +24,11 @@ router.post('/signup', signup);
  **/
 router.get('/channels', getChannels);
 router.get('/channels/:id', getChannel);
-router.post('/channel', addChannel);
-/**
-
+router.post('/channels', addChannel);
 
 /**
  * Messages Routes
  **/
-router.get('/messages', getMessages);
-router.get('/messages/:id', getMessage);
 router.post('/messages', addMessage);
 
 export default router;
