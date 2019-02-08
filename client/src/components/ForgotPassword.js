@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormContainer, FormWrapper } from './styles/Form';
 

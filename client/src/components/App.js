@@ -1,27 +1,28 @@
-import React, { Fragment } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import SignIn from './SignIn';
-import Chat from './Chat';
-import SignUp from './SignUp';
-import Reset from './Reset';
-import ForgotPassword from './ForgotPassword';
-import SignOut from './SignOut';
+import Loading from './Loading';
 import NotFound from './NotFound';
+const SignIn = lazy(() => import('./SignIn'));
+const SignUp = lazy(() => import('./SignUp'));
+const Chat = lazy(() => import('./Chat'));
+const Reset = lazy(() => import('./Reset'));
+const ForgotPassword = lazy(() => import('./ForgotPassword'));
+const SignOut = lazy(() => import('./SignOut'));
 
 function App() {
   return (
     <Router>
-      <Fragment>
+      <Suspense fallback={<Loading />}>
         <Switch>
-          <Route exact path="/" component={SignIn} />
-          <Route path="/chat" component={Chat} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/reset" component={Reset} />
-          <Route path="/forgot-password" component={ForgotPassword} />
-          <Route path="/signout" component={SignOut} />
+          <Route exact path="/" render={() => <SignIn />} />
+          <Route path="/chat" render={() => <Chat />} />
+          <Route path="/signup" render={() => <SignUp />} />
+          <Route path="/reset" render={() => <Reset />} />
+          <Route path="/forgot-password" render={() => <ForgotPassword />} />
+          <Route path="/signout" render={() => <SignOut />} />
           <Route component={NotFound} />
         </Switch>
-      </Fragment>
+      </Suspense>
     </Router>
   );
 }

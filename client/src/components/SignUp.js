@@ -13,7 +13,6 @@ function SignUp() {
     password: '',
   });
   const [errors, setErrors] = useState(null);
-  // const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     setValues({
@@ -45,7 +44,6 @@ function SignUp() {
     try {
       await schema.validate(form, { abortEarly: false });
     } catch ({ inner }) {
-      // console.log(inner);
       return inner.reduce(
         (errors, error) => ({
           ...errors,
@@ -66,11 +64,8 @@ function SignUp() {
       const response = await axios.post('/api/signup', form);
       console.log(response);
       localStorage.setItem('token', response.headers['x-auth-token']);
-
       window.location = '/chat';
     } catch (error) {
-      // console.log(error.response.data);
-      // console.log({ ...error });
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
     }
@@ -114,7 +109,6 @@ function SignUp() {
               onChange={handleChange}
             />
             <Button color="blue" fluid size="large">
-              {/* {loading ? <Loader active inline="centered" /> : 'Sign up'} */}
               Sign up
             </Button>
           </Segment>

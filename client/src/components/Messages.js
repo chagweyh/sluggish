@@ -1,28 +1,95 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { distanceInWordsToNow } from 'date-fns';
+import socket from '../utils/socket';
+import styled from 'styled-components';
+import Feedback from './Feedback';
 
-function Messages(props) {
+const StyledMessages = styled.div`
+  padding: 10px 20px;
+  overflow-y: auto;
+`;
+
+const Message = styled.div`
+  margin: 10px auto;
+  display: flex;
+`;
+
+const Avatar = styled.img`
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+`;
+
+const MessageInfo = styled.div`
+  flex: 1 1;
+  margin-left: 12px;
+  span {
+    display: inline-block;
+  }
+`;
+
+const Username = styled.span`
+  font-weight: bold;
+  font-size: 15px;
+`;
+
+const MessageDate = styled.span`
+  font-size: 14px;
+  margin-left: 10px;
+  color: #99a5b1;
+`;
+
+const MessageText = styled.p`
+  margin: 0;
+  font-size: 15px;
+`;
+
+const Info = styled.h2``;
+
+function Messages({ currentChannel, messages }) {
+  console.log(currentChannel);
+  console.log(messages);
+  const messagesEl = useRef(null);
+  const [info, setInfo] = useState(null);
+
   useEffect(() => {
-    const messages = document.querySelector('.messages');
-    messages.scrollTop = messages.scrollHeight;
+    // scroll to the bottom
+    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
   });
+  useEffect(
+    () => {
+      socket.on('typing', data => {
+        if (!data) {
+          setInfo(null);
+        } else {
+          const { username, channel } = data;
+          // verify if the sender and the receiver of
+          // the message are on the same channel or not
+          channel === currentChannel.name ? setInfo(`${username} is typing a message`) : setInfo(null);
+        }
+      });
+    },
+    [currentChannel],
+  );
   return (
-    <div className="messages">
-      {props.messages.map(message => (
-        <div key={message.id} className="message">
-          <div className="user-img">
-            <img
-              src={message.img ? message.img : 'https://avatars0.githubusercontent.com/u/23120626?s=400&v=4'}
-              alt={message.author + ' image'}
-            />
-          </div>
-          <div className="message-info">
-            <span className="user-name">{message.author}</span>
-            <span className="message-date">{message.date.toString()}</span>
-            <p className="message-text">{message.text}</p>
-          </div>
-        </div>
+    <StyledMessages ref={messagesEl}>
+      {messages.map(message => (
+        <Message key={message._id}>
+          <Avatar src={message.author.gravatar} />
+          <MessageInfo>
+            <Username>{message.author.username}</Username>
+            <MessageDate>
+              {distanceInWordsToNow(new Date(message.createdAt), {
+                addSuffix: true,
+              })}
+            </MessageDate>
+            <MessageText>{message.text}</MessageText>
+          </MessageInfo>
+        </Message>
       ))}
-    </div>
+      {info && <Feedback text={info} />}
+    </StyledMessages>
   );
 }
 

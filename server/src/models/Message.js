@@ -18,7 +18,7 @@ const messageSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   readBy: [
     {
@@ -29,7 +29,8 @@ const messageSchema = new mongoose.Schema({
 });
 
 function autopopulate(next) {
-  this.populate('author', 'username _id');
+  // this.populate('author', 'username _id gravatar');
+  this.populate('author');
   next();
 }
 

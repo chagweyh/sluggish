@@ -15,44 +15,6 @@ body {
   height: 100vh;
 }
 
-.messages {
-  padding: 0 20px;
-  overflow-y: auto;
-}
-
-.message {
-  margin: 10px 0;
-  display: flex;
-}
-
-.user-img {
-  width: 5%;
-  margin-right: 1%;
-}
-
 img {
   max-width: 100%;
-}
-
-.message-info {
-  width: 94%;
-}
-
-.message-info span {
-  display: inline-block;
-}
-
-.user-name {
-  font-weight: bold;
-  margin-right: 8px;
-}
-
-.message-date {
-  color: #99a5b1;
-  font-size: 14px;
-}
-
-.message-text {
-  margin: 8px 0;
-  font-size: 15px;
 }

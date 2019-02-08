@@ -6,7 +6,7 @@ import { getChannels, getChannel, addChannel } from '../controllers/channelContr
 import { addMessage } from '../controllers/messageController';
 
 /**
- * Authentication Router
+ * Authentication Routes
  **/
 router.post('/signin', signin);
 router.post('/signout', signout);

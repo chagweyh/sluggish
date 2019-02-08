@@ -2,10 +2,10 @@ import React from 'react';
 import { Box } from './styles/Box';
 import { List, ListItem } from './styles/List';
 
-function People() {
+function DirectChat() {
   return (
     <Box>
-      <h3>Direct Message</h3>
+      <h3>Direct Messages</h3>
       <List>
         <ListItem>Person1</ListItem>
         <ListItem>Person2</ListItem>
@@ -16,4 +16,4 @@ function People() {
   );
 }
 
-export default People;
+export default DirectChat;

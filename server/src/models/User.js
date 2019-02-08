@@ -3,32 +3,39 @@ import md5 from 'md5';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 50,
-    trim: true,
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 50,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      minlength: 5,
+      maxlength: 255,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 5,
+      maxlength: 255,
+    },
+
+    // resetPasswordToken: String,
+    // resetPasswordExpires: Date,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    minlength: 5,
-    maxlength: 255,
-    trim: true,
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
-  password: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 255,
-  },
-  // resetPasswordToken: String,
-  // resetPasswordExpires: Date,
-});
+);
 
 userSchema.virtual('gravatar').get(function() {
   const hash = md5(this.email);
@@ -46,7 +53,7 @@ userSchema.methods.generateToken = async function() {
       },
     },
     process.env.JWT_KEY,
-    { expiresIn: '1h' }
+    { expiresIn: '1h' },
   );
   return token;
 };

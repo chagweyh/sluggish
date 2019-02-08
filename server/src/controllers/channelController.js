@@ -1,7 +1,8 @@
 import { Channel, validate } from '../models/Channel';
 
 async function getChannels(req, res) {
-  const channels = await Channel.find().populate('owner', '_id username');
+  // const channels = await Channel.find().populate('owner', '_id username');
+  const channels = await Channel.find();
   res.json(channels);
 }
 

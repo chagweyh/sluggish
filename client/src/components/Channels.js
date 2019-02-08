@@ -1,23 +1,17 @@
-import React from 'react';
-import { List, ListItem } from './styles/List';
+import React, { Fragment } from 'react';
 import { Box } from './styles/Box';
+import { List } from './styles/List';
+import AddChannel from './AddChannel';
 
-function Channels({ currentChannel, channels, handleCurrentChannelChange }) {
+function Channels({ children }) {
   return (
-    <Box>
-      <h3>Channels</h3>
-      <List>
-        {channels.map(channel => (
-          <ListItem
-            key={channel}
-            active={channel === currentChannel}
-            onClick={() => handleCurrentChannelChange(channel)}
-          >
-            # {channel}
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+    <Fragment>
+      <Box>
+        <h3>Channels</h3>
+        <List>{children}</List>
+      </Box>
+      <AddChannel />
+    </Fragment>
   );
 }
 
