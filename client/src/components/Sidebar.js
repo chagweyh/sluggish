@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Dropdown, Image } from 'semantic-ui-react';
+import { Dropdown, Image, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Channels from './Channels';
 import DirectChat from './DirectChat';
 import { ListItem } from './styles/List';
 import { getCurrentUser } from '../utils/auth';
+import AddChannel from './AddChannel';
 
 const trigger = (
   <span>
@@ -33,8 +34,7 @@ const StyledSideBar = styled.div`
   background-color: #2185d0;
 `;
 
-function Sidebar({ channels, currentChannel, handleCurrentChannelChange }) {
-  console.log(channels);
+function Sidebar({ users, channels, currentChannel, handleCurrentChannelChange }) {
   return (
     <StyledSideBar>
       <Dropdown trigger={trigger} options={options} />
@@ -45,11 +45,13 @@ function Sidebar({ channels, currentChannel, handleCurrentChannelChange }) {
             active={channelName === currentChannel}
             onClick={() => handleCurrentChannelChange(channelName)}
           >
-            # {channelName}
+            <Icon name={channels[channelName].private ? 'lock' : 'hashtag'} />
+            {channelName}
           </ListItem>
         ))}
       </Channels>
-      <DirectChat />
+      <AddChannel users={users} />
+      <DirectChat users={users} />
     </StyledSideBar>
   );
 }

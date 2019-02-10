@@ -19,13 +19,13 @@ async function signup(req, res) {
 }
 
 async function getUser(req, res) {
-  const user = await User.find({ _id: req.params.id });
+  const user = await User.find({ _id: req.params.id }).select('-password');
   if (!user) return res.status(404).send('the user with the given id was not found');
   res.json(user);
 }
 
 async function getUsers(req, res) {
-  const users = await User.find();
+  const users = await User.find().select('-password');
   res.json(users);
 }
 

@@ -9,14 +9,14 @@ import { FormContainer, FormWrapper } from './styles/Form';
 import { getCurrentUser } from '../utils/auth';
 
 function SignIn() {
-  const [form, setValues] = useState({
+  const [form, setForm] = useState({
     email: '',
     password: '',
   });
   const [errors, setErrors] = useState(null);
 
   const handleChange = e => {
-    setValues({
+    setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
@@ -58,7 +58,6 @@ function SignIn() {
 
     try {
       const response = await axios.post('/api/signin', form);
-      console.log(response);
       localStorage.setItem('token', response.data);
       window.location = '/chat';
     } catch (error) {
@@ -68,6 +67,7 @@ function SignIn() {
   };
 
   if (getCurrentUser()) return <Redirect to="/chat" />;
+
   return (
     <FormContainer>
       <FormWrapper>

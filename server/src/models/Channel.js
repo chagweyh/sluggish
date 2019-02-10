@@ -6,7 +6,7 @@ const channelSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      minlength: 5,
+      minlength: 3,
       maxlength: 255,
     },
     purpose: {
@@ -20,12 +20,6 @@ const channelSchema = new mongoose.Schema(
     },
     owner: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     members: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
-    // messages: [
-    //   {
-    //     messageId: { type: mongoose.Schema.ObjectId, ref: 'Message' },
-    //     readBy: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
-    //   },
-    // ],
   },
   {
     toJSON: { virtuals: true },
@@ -52,7 +46,7 @@ const Channel = mongoose.model('Channel', channelSchema);
 const validateChannel = channel => {
   const schema = {
     name: Joi.string()
-      .min(5)
+      .min(3)
       .max(255)
       .required(),
     purpose: Joi.string()

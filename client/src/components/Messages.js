@@ -48,8 +48,6 @@ const MessageText = styled.p`
 const Info = styled.h2``;
 
 function Messages({ currentChannel, messages }) {
-  console.log(currentChannel);
-  console.log(messages);
   const messagesEl = useRef(null);
   const [info, setInfo] = useState(null);
 
@@ -57,21 +55,18 @@ function Messages({ currentChannel, messages }) {
     // scroll to the bottom
     messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
   });
-  useEffect(
-    () => {
-      socket.on('typing', data => {
-        if (!data) {
-          setInfo(null);
-        } else {
-          const { username, channel } = data;
-          // verify if the sender and the receiver of
-          // the message are on the same channel or not
-          channel === currentChannel.name ? setInfo(`${username} is typing a message`) : setInfo(null);
-        }
-      });
-    },
-    [currentChannel],
-  );
+  useEffect(() => {
+    socket.on('typing', data => {
+      if (!data) {
+        setInfo(null);
+      } else {
+        const { username, channel } = data;
+        // verify if the sender and the receiver of
+        // the message are on the same channel or not
+        channel === currentChannel.name ? setInfo(`${username} is typing a message`) : setInfo(null);
+      }
+    });
+  }, [currentChannel]);
   return (
     <StyledMessages ref={messagesEl}>
       {messages.map(message => (

@@ -15,6 +15,7 @@ const StyledChat = styled.div`
 
 function Chat() {
   const [currentChannel, setCurrentChannel] = useState('general');
+  const [users, setUsers] = useState(null);
   const [channels, dispatch] = useReducer((channels, action) => {
     switch (action.type) {
       case 'ADD_CHANNEL':
@@ -36,8 +37,15 @@ function Chat() {
     setLoading(true);
     setError(false);
     try {
-      const response = await axios.get('/api/channels');
-      const channels = response.data;
+      const channelsPromise = axios.get('/api/channels');
+      const usersPromise = axios.get('/api/users');
+
+      const [channelsResponse, usersResponse] = await axios.all([channelsPromise, usersPromise]);
+
+      const channels = channelsResponse.data;
+      const users = usersResponse.data.filter(user => user.username !== getCurrentUser().data.username);
+      console.log(users)
+      setUsers(users);
       channels.forEach(channel => dispatch({ type: 'ADD_CHANNEL', channelName: channel.name, channel }));
     } catch (error) {
       setError(error);
@@ -52,7 +60,6 @@ function Chat() {
 
   useEffect(() => {
     socket.on('send message', data => {
-      console.log(data);
       dispatch({ type: 'ADD_MESSAGE', data });
     });
   }, []);
@@ -70,6 +77,7 @@ function Chat() {
   return (
     <StyledChat>
       <Sidebar
+        users={users}
         channels={channels}
         currentChannel={currentChannel}
         handleCurrentChannelChange={channel => setCurrentChannel(channel)}
