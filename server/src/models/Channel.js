@@ -24,7 +24,7 @@ const channelSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 channelSchema.virtual('messages', {
@@ -43,7 +43,7 @@ channelSchema.pre('find', autopopulate);
 
 const Channel = mongoose.model('Channel', channelSchema);
 
-const validateChannel = channel => {
+const validateChannel = (channel) => {
   const schema = {
     name: Joi.string()
       .min(3)

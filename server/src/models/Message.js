@@ -39,7 +39,7 @@ messageSchema.pre('find', autopopulate);
 
 const Message = mongoose.model('Message', messageSchema);
 
-const validateMessage = message => {
+const validateMessage = (message) => {
   const schema = {
     text: Joi.string()
       .min(2)

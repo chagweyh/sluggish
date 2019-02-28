@@ -56,7 +56,7 @@ function Messages({ currentChannel, messages }) {
     messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
   });
   useEffect(() => {
-    socket.on('typing', data => {
+    socket.on('typing', (data) => {
       if (!data) {
         setInfo(null);
       } else {
@@ -69,7 +69,7 @@ function Messages({ currentChannel, messages }) {
   }, [currentChannel]);
   return (
     <StyledMessages ref={messagesEl}>
-      {messages.map(message => (
+      {messages.map((message) => (
         <Message key={message._id}>
           <Avatar src={message.author.gravatar} />
           <MessageInfo>

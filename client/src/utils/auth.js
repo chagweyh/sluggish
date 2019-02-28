@@ -9,4 +9,8 @@ function getCurrentUser() {
   }
 }
 
-export { getCurrentUser };
+function getJwt() {
+  return localStorage.getItem('token');
+}
+
+export { getCurrentUser, getJwt };

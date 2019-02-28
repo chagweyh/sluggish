@@ -9,7 +9,7 @@ const List = styled.ul`
 const ListItem = styled.li`
   cursor: pointer;
   padding: 4px;
-  ${props =>
+  ${(props) =>
     props.active &&
     css`
       background: #f1c40f;

@@ -43,10 +43,9 @@ function Chat() {
       const [channelsResponse, usersResponse] = await axios.all([channelsPromise, usersPromise]);
 
       const channels = channelsResponse.data;
-      const users = usersResponse.data.filter(user => user.username !== getCurrentUser().data.username);
-      console.log(users)
+      const users = usersResponse.data.filter((user) => user.username !== getCurrentUser().data.username);
       setUsers(users);
-      channels.forEach(channel => dispatch({ type: 'ADD_CHANNEL', channelName: channel.name, channel }));
+      channels.forEach((channel) => dispatch({ type: 'ADD_CHANNEL', channelName: channel.name, channel }));
     } catch (error) {
       setError(error);
     } finally {
@@ -59,7 +58,7 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    socket.on('send message', data => {
+    socket.on('send message', (data) => {
       dispatch({ type: 'ADD_MESSAGE', data });
     });
   }, []);
@@ -80,7 +79,8 @@ function Chat() {
         users={users}
         channels={channels}
         currentChannel={currentChannel}
-        handleCurrentChannelChange={channel => setCurrentChannel(channel)}
+        handleCurrentChannelChange={(channel) => setCurrentChannel(channel)}
+        handleAddChannel={(channel) => dispatch({ type: 'ADD_CHANNEL', channelName: channel.name, channel })}
       />
       <Main messages={channels[currentChannel].messages || []} currentChannel={channels[currentChannel]} />
     </StyledChat>

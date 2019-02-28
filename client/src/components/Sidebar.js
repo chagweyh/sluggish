@@ -34,7 +34,7 @@ const StyledSideBar = styled.div`
   background-color: #2185d0;
 `;
 
-function Sidebar({ users, channels, currentChannel, handleCurrentChannelChange }) {
+function Sidebar({ users, channels, currentChannel, handleCurrentChannelChange, handleAddChannel }) {
   return (
     <StyledSideBar>
       <Dropdown trigger={trigger} options={options} />
@@ -50,7 +50,7 @@ function Sidebar({ users, channels, currentChannel, handleCurrentChannelChange }
           </ListItem>
         ))}
       </Channels>
-      <AddChannel users={users} />
+      <AddChannel users={users} handleAddChannel={handleAddChannel} />
       <DirectChat users={users} />
     </StyledSideBar>
   );

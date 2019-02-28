@@ -60,7 +60,7 @@ userSchema.methods.generateToken = async function() {
 
 const User = mongoose.model('User', userSchema);
 
-const validateUser = user => {
+const validateUser = (user) => {
   const schema = {
     username: Joi.string()
       .min(2)

@@ -14,7 +14,7 @@ function SignUp() {
   });
   const [errors, setErrors] = useState(null);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setValues({
       ...form,
       [e.target.name]: e.target.value,
@@ -49,12 +49,12 @@ function SignUp() {
           ...errors,
           [`${error.name}-${error.path}`]: error.message,
         }),
-        {}
+        {},
       );
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = await validateForm();
     setErrors(validationErrors);
@@ -62,7 +62,6 @@ function SignUp() {
 
     try {
       const response = await axios.post('/api/signup', form);
-      console.log(response);
       localStorage.setItem('token', response.headers['x-auth-token']);
       window.location = '/chat';
     } catch (error) {

@@ -15,7 +15,7 @@ function SignIn() {
   });
   const [errors, setErrors] = useState(null);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -50,7 +50,7 @@ function SignIn() {
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = await validateForm();
     setErrors(validationErrors);

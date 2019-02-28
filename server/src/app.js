@@ -16,7 +16,7 @@ dotenv.config({ path: 'variables.env' });
 mongoose.set('useCreateIndex', true);
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
-mongoose.connection.on('error', err => {
+mongoose.connection.on('error', (err) => {
   console.error(err.message);
 });
 
@@ -39,16 +39,15 @@ const server = app.listen(app.get('port'), () => {
 
 const io = socket(server);
 
-io.on('connection', socket => {
-  console.log('made socket connection', socket.id);
+io.on('connection', (client) => {
+  console.log('made socket connection', client.id);
 
   // Handle message event
-  socket.on('send message', message => {
+  client.on('send message', (message) => {
     io.sockets.emit('send message', message);
   });
 
-  socket.on('typing', data => {
-    socket.broadcast.emit('typing', data);
-    // io.sockets.emit('typing', data);
+  client.on('typing', (data) => {
+    client.broadcast.emit('typing', data);
   });
 });

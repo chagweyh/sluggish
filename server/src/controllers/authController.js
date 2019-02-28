@@ -3,37 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 
-async function signin(req, res) {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send('user does not exist');
-
-  const match = await bcrypt.compare(req.body.password, user.password);
-  if (!match) return res.status(400).send('verify your password');
-
-  const token = await user.generateToken();
-  res.send(token);
-}
-
-async function signout(req, res) {
-  res.json({ msg: 'Signed out!' });
-}
-
-async function isLoggedIn(req, res, next) {
-  const token = req.header('x-auth-token');
-  if (!token) return res.status(401).send('Access denied. No token provided');
-  try {
-    const payload = await jwt.verify(token, process.env.JWT_KEY);
-    req.user = payload;
-    next();
-  } catch (err) {
-    return res.status(400).send(err.message);
-  }
-}
-
-const validate = user => {
+const validate = (user) => {
   const schema = {
     email: Joi.string()
       .min(5)
@@ -49,4 +19,30 @@ const validate = user => {
   return Joi.validate(user, schema);
 };
 
-export { signin, signout, isLoggedIn };
+async function signIn(req, res) {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send('user does not exist');
+
+  const match = await bcrypt.compare(req.body.password, user.password);
+  if (!match) return res.status(400).send('verify your password');
+
+  const token = await user.generateToken();
+  return res.send(token);
+}
+
+async function isLoggedIn(req, res, next) {
+  const token = req.header('x-auth-token');
+  if (!token) return res.status(401).send('Access denied. No token provided');
+  try {
+    const payload = await jwt.verify(token, process.env.JWT_KEY);
+    req.user = payload;
+    return next();
+  } catch (err) {
+    return res.status(400).send(err.message);
+  }
+}
+
+export { signIn, isLoggedIn };

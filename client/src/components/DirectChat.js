@@ -7,7 +7,7 @@ function DirectChat({ users }) {
     <Box>
       <h3>Direct Messages</h3>
       <List>
-        {users.map(user => (
+        {users.map((user) => (
           <ListItem key={user._id}>{user.username}</ListItem>
         ))}
       </List>

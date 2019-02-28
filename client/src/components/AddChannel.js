@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Header, Icon, Modal, Input, Dropdown, Form, Checkbox } from 'semantic-ui-react';
+import { Button, Header, Icon, Modal, Input, Form, Checkbox } from 'semantic-ui-react';
 import axios from 'axios';
-import { getCurrentUser } from '../utils/auth';
+import { getCurrentUser, getJwt } from '../utils/auth';
 
-function AddChannel({ users }) {
+function AddChannel({ users, handleAddChannel }) {
   const [open, setOpen] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [form, setForm] = useState({
+  const formInitialState = {
     private: false,
     name: '',
     purpose: '',
     members: [],
-  });
+  };
+  const [form, setForm] = useState(formInitialState);
 
-  const members = users.map(user => ({
+  const usersList = users.map((user) => ({
     key: user.id,
     value: user.id,
     text: user.username,
@@ -30,8 +30,20 @@ function AddChannel({ users }) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/channels', { ...form, owner: getCurrentUser().data._id });
+      const response = await axios.post(
+        '/api/channels',
+        { ...form, owner: getCurrentUser().data._id },
+        {
+          headers: {
+            'x-auth-token': getJwt(),
+          },
+        },
+      );
       const channel = response.data;
+      setForm(formInitialState);
+      setOpen(false);
+      handleAddChannel(channel);
+      console.log(channel);
     } catch (error) {
       console.log(error);
     }
@@ -50,15 +62,13 @@ function AddChannel({ users }) {
       // closeOnDimmerClick={false}
       onClose={() => setOpen(false)}
     >
-      <Header content={checked ? 'Create a private channel' : 'Create a channel'} />
+      <Header content={form.private ? 'Create a private channel' : 'Create a channel'} />
       <Modal.Content>
         <Form size="large" method="post" id="addChannel" onSubmit={handleSubmit}>
           <Form.Field>
             <Checkbox
-              checked={checked}
-              onClick={() => setChecked(!checked)}
               label={
-                checked
+                form.private
                   ? 'This channel can only be joined or viewed by invite.'
                   : 'Anyone can view and join this channel.'
               }
@@ -74,7 +84,7 @@ function AddChannel({ users }) {
               id="name"
               name="name"
               value={form.name}
-              icon={checked ? 'lock' : 'hashtag'}
+              icon={form.private ? 'lock' : 'hashtag'}
               iconPosition="left"
               placeholder="e.g. react"
               onChange={handleChange}
@@ -94,7 +104,7 @@ function AddChannel({ users }) {
               multiple
               search
               selection
-              options={members}
+              options={usersList}
               placeholder="Search by name"
               value={form.members}
               onChange={handleChange}
