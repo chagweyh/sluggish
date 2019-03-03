@@ -1,10 +1,7 @@
 import bcrypt from 'bcrypt';
 import { User, validate } from '../models/User';
 
-async function signUp(req, res) {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+export async function signUp(req, res) {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send('user already exists!');
 
@@ -15,18 +12,29 @@ async function signUp(req, res) {
 
   const token = await user.generateToken();
   const { _id, username, email, gravatar } = user;
-  return res.header('x-auth-token', token).send({ _id, username, email, gravatar });
+  return res
+    .header('x-auth-token', token)
+    .status(201)
+    .send({ _id, username, email, gravatar });
 }
 
-async function getUser(req, res) {
+export async function getUser(req, res) {
   const user = await User.find({ _id: req.params.id }).select('-password');
   if (!user) return res.status(404).send('the user with the given id was not found');
-  return res.json(user);
+  return res.status(200).json(user);
 }
 
-async function getUsers(req, res) {
+export async function getUsers(req, res) {
   const users = await User.find().select('-password');
-  return res.json(users);
+  return res.status(200).json(users);
 }
 
-export { signUp, getUser, getUsers };
+export function getAccount(req, res) {
+  return res.status(200).send(req.user);
+}
+
+export function validateUser(req, res, next) {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  return next();
+}

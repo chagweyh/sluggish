@@ -10,8 +10,8 @@ import AddChannel from './AddChannel';
 
 const trigger = (
   <span>
-    <Image avatar src={getCurrentUser() && getCurrentUser().data.gravatar} />{' '}
-    {getCurrentUser() && getCurrentUser().data.username}
+    <Image avatar src={getCurrentUser() && getCurrentUser().gravatar} />
+    {getCurrentUser() && getCurrentUser().username}
   </span>
 );
 

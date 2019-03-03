@@ -71,9 +71,9 @@ function Messages({ currentChannel, messages }) {
     <StyledMessages ref={messagesEl}>
       {messages.map((message) => (
         <Message key={message._id}>
-          <Avatar src={message.author.gravatar} />
+          <Avatar src={message.createdBy.gravatar} />
           <MessageInfo>
-            <Username>{message.author.username}</Username>
+            <Username>{message.createdBy.username}</Username>
             <MessageDate>
               {distanceInWordsToNow(new Date(message.createdAt), {
                 addSuffix: true,

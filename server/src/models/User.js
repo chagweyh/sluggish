@@ -45,12 +45,10 @@ userSchema.virtual('gravatar').get(function() {
 userSchema.methods.generateToken = async function() {
   const token = await jwt.sign(
     {
-      data: {
-        _id: this.id,
-        username: this.username,
-        email: this.email,
-        gravatar: this.gravatar,
-      },
+      _id: this.id,
+      username: this.username,
+      email: this.email,
+      gravatar: this.gravatar,
     },
     process.env.JWT_KEY,
     { expiresIn: '24h' },

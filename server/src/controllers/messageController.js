@@ -1,14 +1,15 @@
 import { Message, validate } from '../models/Message';
 
-async function addMessage(req, res) {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const message = new Message(req.body);
+export async function addMessage(req, res) {
+  const createdBy = req.user._id;
+  const message = new Message({ ...req.body, createdBy });
   await message.save();
-  await message.populate('author', '-password').execPopulate();
-  console.log(message);
-  return res.json(message);
+  await message.populate('createdBy', '-password').execPopulate();
+  return res.status(201).json(message);
 }
 
-export default addMessage;
+export function validateMessage(req, res, next) {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  return next();
+}

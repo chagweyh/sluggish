@@ -1,33 +1,24 @@
 import express from 'express';
-import { signUp, getUser, getUsers } from '../controllers/userController';
-import { signIn, isLoggedIn } from '../controllers/authController';
-import { getChannels, getChannel, addChannel } from '../controllers/channelController';
-import addMessage from '../controllers/messageController';
+import { getChannels, getChannel, addChannel, validateChannel } from '../controllers/channelController';
+import { signUp, getUser, getUsers, getAccount, validateUser } from '../controllers/userController';
+import { signIn, validateAuth, isLoggedIn } from '../controllers/authController';
+import { addMessage, validateMessage } from '../controllers/messageController';
+import validateObjectId from '../utils/validateObjectId';
 
 const router = express.Router();
 
-/**
- * Authentication Routes
- * */
-router.post('/signin', signIn);
+router.post('/signin', validateAuth, signIn);
 
-/**
- * Users Routes
- * */
 router.get('/users', getUsers);
-router.get('/users/:id', getUser);
-router.post('/signup', signUp);
+router.get('/users/:id', validateObjectId, getUser);
+router.post('/signup', validateUser, signUp);
 
-/**
- * Channels Routes
- * */
+router.get('/account', isLoggedIn, getAccount);
+
 router.get('/channels', getChannels);
-router.get('/channels/:id', getChannel);
-router.post('/channels', isLoggedIn, addChannel);
+router.get('/channels/:id', validateObjectId, getChannel);
+router.post('/channels', [isLoggedIn, validateChannel], addChannel);
 
-/**
- * Messages Routes
- * */
-router.post('/messages', isLoggedIn, addMessage);
+router.post('/messages', [isLoggedIn, validateMessage], addMessage);
 
 export default router;

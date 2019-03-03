@@ -21,7 +21,6 @@ function MessageInput({ currentChannel }) {
         '/api/messages',
         {
           text: input.current.value,
-          author: getCurrentUser().data._id,
           channel: currentChannel._id,
         },
         {
@@ -31,6 +30,7 @@ function MessageInput({ currentChannel }) {
         },
       );
       const message = response.data;
+      console.log(message);
       socket.emit('send message', {
         message,
         channel: currentChannel.name,
@@ -47,7 +47,7 @@ function MessageInput({ currentChannel }) {
 
   function handleChange() {
     socket.emit('typing', {
-      username: getCurrentUser().data.username,
+      username: getCurrentUser().username,
       channel: currentChannel.name,
     });
     clearTimeout(timeout);

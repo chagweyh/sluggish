@@ -6,7 +6,7 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  author: {
+  createdBy: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: true,
@@ -29,8 +29,8 @@ const messageSchema = new mongoose.Schema({
 });
 
 function autopopulate(next) {
-  // this.populate('author', 'username _id gravatar');
-  this.populate('author');
+  // this.populate('createdBy', 'username _id gravatar');
+  this.populate('createdBy');
   next();
 }
 
@@ -45,7 +45,6 @@ const validateMessage = (message) => {
       .min(2)
       .max(50)
       .required(),
-    author: Joi.objectId().required(),
     channel: Joi.objectId().required(),
   };
 

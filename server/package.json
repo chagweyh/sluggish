@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --exec babel-node src/app.js"
+    "start": "nodemon --exec babel-node src/server.js",
+    "test": "jest --watchAll --verbose"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
@@ -17,18 +18,22 @@
     "jsonwebtoken": "^8.5.0",
     "md5": "^2.2.1",
     "mongoose": "^5.4.16",
+    "morgan": "^1.9.1",
     "nodemailer": "^5.1.1",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.4",
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.1.0",
     "nodemon": "^1.18.10",
     "prettier": "^1.16.4"
   }

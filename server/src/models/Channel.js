@@ -18,7 +18,7 @@ const channelSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    owner: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+    createdBy: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     members: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   },
   {
@@ -53,7 +53,7 @@ const validateChannel = (channel) => {
       .min(5)
       .max(255),
     members: Joi.array().items(Joi.objectId()),
-    owner: Joi.objectId().required(),
+    private: Joi.bool(),
   };
 
   return Joi.validate(channel, schema);

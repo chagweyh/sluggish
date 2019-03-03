@@ -30,21 +30,19 @@ function AddChannel({ users, handleAddChannel }) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        '/api/channels',
-        { ...form, owner: getCurrentUser().data._id },
-        {
-          headers: {
-            'x-auth-token': getJwt(),
-          },
+      const response = await axios.post('/api/channels', form, {
+        headers: {
+          'x-auth-token': getJwt(),
         },
-      );
+      });
       const channel = response.data;
       setForm(formInitialState);
       setOpen(false);
       handleAddChannel(channel);
       console.log(channel);
     } catch (error) {
+      console.log(getJwt());
+      console.log(error.message);
       console.log(error);
     }
   }

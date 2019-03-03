@@ -43,7 +43,7 @@ function Chat() {
       const [channelsResponse, usersResponse] = await axios.all([channelsPromise, usersPromise]);
 
       const channels = channelsResponse.data;
-      const users = usersResponse.data.filter((user) => user.username !== getCurrentUser().data.username);
+      const users = usersResponse.data.filter((user) => user.username !== getCurrentUser().username);
       setUsers(users);
       channels.forEach((channel) => dispatch({ type: 'ADD_CHANNEL', channelName: channel.name, channel }));
     } catch (error) {
@@ -55,7 +55,7 @@ function Chat() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   useEffect(() => {
     socket.on('send message', (data) => {
