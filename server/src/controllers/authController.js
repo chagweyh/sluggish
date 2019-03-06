@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
+import config from 'config';
 import { User } from '../models/User';
 
 const validate = (user) => {
@@ -40,7 +41,7 @@ export async function isLoggedIn(req, res, next) {
   const token = req.header('x-auth-token');
   if (!token) return res.status(401).send('Access denied. No token provided');
   try {
-    const payload = await jwt.verify(token, process.env.JWT_KEY);
+    const payload = await jwt.verify(token, config.get('jwt_key'));
     req.user = payload;
     return next();
   } catch (err) {
