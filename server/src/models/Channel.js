@@ -39,7 +39,7 @@ function autopopulate(next) {
 }
 
 channelSchema.pre('findOne', autopopulate);
-channelSchema.pre('find', autopopulate);
+// channelSchema.pre('find', autopopulate);
 
 const Channel = mongoose.model('Channel', channelSchema);
 

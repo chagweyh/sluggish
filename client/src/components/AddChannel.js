@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Header, Icon, Modal, Input, Form, Checkbox } from 'semantic-ui-react';
 import axios from 'axios';
-import { getCurrentUser, getJwt } from '../utils/auth';
+import { getJwt } from '../utils/auth';
 
 function AddChannel({ users, handleAddChannel }) {
   const [open, setOpen] = useState(false);
@@ -95,6 +95,7 @@ function AddChannel({ users, handleAddChannel }) {
           <Form.Field>
             <label htmlFor="invite_members">Send invites to</label>
             <Form.Dropdown
+              disabled={!form.private}
               id="members"
               name="members"
               clearable

@@ -40,7 +40,7 @@ function SignUp() {
       .required(),
   });
 
-  const validateForm = async () => {
+  async function validateForm() {
     try {
       await schema.validate(form, { abortEarly: false });
     } catch ({ inner }) {
@@ -52,9 +52,9 @@ function SignUp() {
         {},
       );
     }
-  };
+  }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     const validationErrors = await validateForm();
     setErrors(validationErrors);
@@ -68,7 +68,7 @@ function SignUp() {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
     }
-  };
+  }
 
   return (
     <FormContainer>

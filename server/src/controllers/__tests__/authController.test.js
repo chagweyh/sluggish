@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+// import request from 'request';
 import { User } from '../../models/User';
 import { isLoggedIn } from '../authController';
-
-dotenv.config();
+// import { Channel } from '../../models/Channel';
 
 describe('Authentication:', () => {
   it('should populate req.user with the payload of a valid JWT', async () => {
     const userSchema = {
       _id: mongoose.Types.ObjectId().toHexString(),
-      email: 'blabla@gmail.com',
+      email: 'hello@hello.com',
     };
 
     const user = new User(userSchema);

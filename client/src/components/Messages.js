@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { distanceInWordsToNow } from 'date-fns';
-import socket from '../utils/socket';
 import styled from 'styled-components';
 import Feedback from './Feedback';
 
@@ -45,28 +44,13 @@ const MessageText = styled.p`
   font-size: 15px;
 `;
 
-const Info = styled.h2``;
-
-function Messages({ currentChannel, messages }) {
+function Messages({ messages, info }) {
   const messagesEl = useRef(null);
-  const [info, setInfo] = useState(null);
-
   useEffect(() => {
     // scroll to the bottom
     messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
   });
-  useEffect(() => {
-    socket.on('typing', (data) => {
-      if (!data) {
-        setInfo(null);
-      } else {
-        const { username, channel } = data;
-        // verify if the sender and the receiver of
-        // the message are on the same channel or not
-        channel === currentChannel.name ? setInfo(`${username} is typing a message`) : setInfo(null);
-      }
-    });
-  }, [currentChannel]);
+
   return (
     <StyledMessages ref={messagesEl}>
       {messages.map((message) => (

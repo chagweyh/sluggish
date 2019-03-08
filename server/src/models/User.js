@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import md5 from 'md5';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
+import config from 'config';
 
 const userSchema = new mongoose.Schema(
   {
@@ -50,7 +51,7 @@ userSchema.methods.generateToken = async function() {
       email: this.email,
       gravatar: this.gravatar,
     },
-    process.env.JWT_KEY,
+    config.get('jwt_key'),
     { expiresIn: '24h' },
   );
   return token;

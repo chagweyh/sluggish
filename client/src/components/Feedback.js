@@ -9,7 +9,7 @@ function Feedback({ text = 'Loading', speed = 300 }) {
     }, speed);
 
     return () => clearInterval(timeout);
-  }, [content]);
+  }, [content, speed, text]);
 
   return (
     <Feed.Event>

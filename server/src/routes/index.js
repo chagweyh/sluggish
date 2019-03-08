@@ -8,10 +8,10 @@ import validateObjectId from '../utils/validateObjectId';
 const router = express.Router();
 
 router.post('/signin', validateAuth, signIn);
+router.post('/signup', validateUser, signUp);
 
 router.get('/users', getUsers);
 router.get('/users/:id', validateObjectId, getUser);
-router.post('/signup', validateUser, signUp);
 
 router.get('/account', isLoggedIn, getAccount);
 
