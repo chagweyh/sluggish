@@ -10,7 +10,7 @@ const MessageForm = styled(Form)`
   border-top: 1px solid #e8e4e4;
 `;
 
-function MessageInput({ currentChannel }) {
+function MessageInput({ channelId }) {
   const input = useRef(null);
   let timeout;
 
@@ -21,7 +21,7 @@ function MessageInput({ currentChannel }) {
         '/api/messages',
         {
           text: input.current.value,
-          channel: currentChannel._id,
+          channel: channelId,
         },
         {
           headers: {
@@ -33,10 +33,10 @@ function MessageInput({ currentChannel }) {
       console.log(message);
       socket.emit('send message', {
         message,
-        channel: currentChannel.name,
+        channelId,
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
     input.current.value = '';
   }
@@ -48,7 +48,7 @@ function MessageInput({ currentChannel }) {
   function handleChange() {
     socket.emit('typing', {
       username: getCurrentUser().username,
-      channel: currentChannel.name,
+      channelId,
     });
     clearTimeout(timeout);
     timeout = setTimeout(stoppedTyping, 2000);

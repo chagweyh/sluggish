@@ -15,12 +15,12 @@ function SignIn() {
   });
   const [errors, setErrors] = useState(null);
 
-  const handleChange = (e) => {
+  function handleChange(e) {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-  };
+  }
 
   const schema = yup.object().shape({
     email: yup
@@ -36,7 +36,7 @@ function SignIn() {
       .required(),
   });
 
-  const validateForm = async () => {
+  async function validateForm() {
     try {
       await schema.validate(form, { abortEarly: false });
     } catch ({ inner }) {
@@ -48,9 +48,9 @@ function SignIn() {
         {},
       );
     }
-  };
+  }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     const validationErrors = await validateForm();
     setErrors(validationErrors);
@@ -64,7 +64,7 @@ function SignIn() {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
     }
-  };
+  }
 
   if (getCurrentUser()) return <Redirect to="/chat" />;
 

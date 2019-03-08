@@ -7,14 +7,17 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  cursor: pointer;
-  padding: 4px;
-  ${(props) =>
-    props.active &&
-    css`
-      background: #f1c40f;
-      color: #000;
-    `}
+  a {
+    padding: 4px;
+    color: #fff;
+    display: block;
+    ${(props) =>
+      props.active &&
+      css`
+        background: #f1c40f;
+        color: #000;
+      `}
+  }
 `;
 
 export { List, ListItem };
