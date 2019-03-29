@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
       minlength: 5,
       maxlength: 255,
     },
-
+    stars: [{ type: mongoose.Schema.ObjectId, ref: 'Channel' }],
     // resetPasswordToken: String,
     // resetPasswordExpires: Date,
   },
@@ -47,9 +47,6 @@ userSchema.methods.generateToken = async function() {
   const token = await jwt.sign(
     {
       _id: this.id,
-      username: this.username,
-      email: this.email,
-      gravatar: this.gravatar,
     },
     config.get('jwt_key'),
     { expiresIn: '24h' },

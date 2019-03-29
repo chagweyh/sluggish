@@ -16,7 +16,11 @@ const ListItem = styled.li`
       css`
         background: #f1c40f;
         color: #000;
-      `}
+      `};
+    &:hover {
+      background: #f1c40f;
+      color: #000;
+    }
   }
 `;
 

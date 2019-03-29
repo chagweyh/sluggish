@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Header, Icon, Modal, Input, Form, Checkbox } from 'semantic-ui-react';
-import axios from 'axios';
-import { getJwt } from '../utils/auth';
+import API from '../utils/api';
 
 function AddChannel({ users, handleAddChannel }) {
   const [open, setOpen] = useState(false);
@@ -25,25 +24,21 @@ function AddChannel({ users, handleAddChannel }) {
       ...form,
       [data.name]: data.value || data.checked,
     });
+    console.log(form);
   };
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/channels', form, {
-        headers: {
-          'x-auth-token': getJwt(),
-        },
-      });
+      console.log(form);
+      const response = await API.post('/channels', form);
       const channel = response.data;
       setForm(formInitialState);
       setOpen(false);
       handleAddChannel(channel);
       console.log(channel);
     } catch (error) {
-      console.log(getJwt());
-      console.log(error.message);
-      console.log(error);
+      console.error(error);
     }
   }
 

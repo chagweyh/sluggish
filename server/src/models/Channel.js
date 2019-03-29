@@ -24,6 +24,7 @@ const channelSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    timestamps: { createdAt: true, updatedAt: false },
   },
 );
 
@@ -34,7 +35,8 @@ channelSchema.virtual('messages', {
 });
 
 function autopopulate(next) {
-  this.populate('messages');
+  this.populate('messages createdBy');
+  // this.populate('createdBy', 'username');
   next();
 }
 
@@ -52,8 +54,9 @@ const validateChannel = (channel) => {
     purpose: Joi.string()
       .min(5)
       .max(255),
-    members: Joi.array().items(Joi.objectId()),
-    private: Joi.bool(),
+    // members: Joi.array().items(Joi.objectId()),
+    members: Joi.array(),
+    private: Joi.boolean(),
   };
 
   return Joi.validate(channel, schema);

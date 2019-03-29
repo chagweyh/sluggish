@@ -6,7 +6,7 @@ import { FormContainer, FormWrapper } from './styles/Form';
 import Errors from './Errors';
 import axios from 'axios';
 
-function SignUp() {
+function SignUp(props) {
   const [form, setValues] = useState({
     username: '',
     email: '',
@@ -63,7 +63,7 @@ function SignUp() {
     try {
       const response = await axios.post('/api/signup', form);
       localStorage.setItem('token', response.headers['x-auth-token']);
-      window.location = '/chat';
+      props.history.push('/chat');
     } catch (error) {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });

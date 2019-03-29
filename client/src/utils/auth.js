@@ -10,7 +10,7 @@ function getCurrentUser() {
 }
 
 function getJwt() {
-  return localStorage.getItem('token');
+  return localStorage.getItem('token') || null;
 }
 
 export { getCurrentUser, getJwt };

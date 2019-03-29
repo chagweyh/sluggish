@@ -6,6 +6,7 @@ import Feedback from './Feedback';
 const StyledMessages = styled.div`
   padding: 10px 20px;
   overflow-y: auto;
+  height: 80vh;
 `;
 
 const Message = styled.div`
@@ -14,9 +15,7 @@ const Message = styled.div`
 `;
 
 const Avatar = styled.img`
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
+  max-height: 40px;
   border-radius: 4px;
 `;
 

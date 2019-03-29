@@ -1,11 +1,11 @@
-import axios from 'axios';
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, useContext, Fragment } from 'react';
+import { UserContext } from '../contexts/user';
 import Channel from './Channel';
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import Loading from './Loading';
-import { getCurrentUser } from '../utils/auth';
 import PrivateRoute from './PrivateRoute';
+import API from '../utils/api';
 
 const StyledChat = styled.div`
   display: flex;
@@ -17,26 +17,34 @@ function Chat({ match, location }) {
   const [channels, setChannels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [, dispatch] = useContext(UserContext);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(false);
       try {
-        const channelsPromise = axios.get('/api/channels');
-        const usersPromise = axios.get('/api/users');
-        const [channelsResponse, usersResponse] = await axios.all([channelsPromise, usersPromise]);
-        const channels = channelsResponse.data;
-        const users = usersResponse.data.filter((user) => user.username !== getCurrentUser().username);
+        const channelsPromise = API.get('/channels');
+        const usersPromise = API.get('/users');
+        const userPromise = API.get('/users/me');
+        const [channelsResponse, usersResponse, userResponse] = await Promise.all([
+          channelsPromise,
+          usersPromise,
+          userPromise,
+        ]);
+        const users = usersResponse.data.filter((user) => user.username !== userResponse.data.username);
         setUsers(users);
-        setChannels(channels);
+        setChannels(channelsResponse.data);
+        dispatch({ type: 'ADD_USER', user: userResponse.data });
       } catch (error) {
+        console.error(error);
         setError(error);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleAddChannel(channel) {

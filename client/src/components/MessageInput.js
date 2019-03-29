@@ -1,9 +1,9 @@
-import axios from 'axios';
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import { Form } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { getCurrentUser, getJwt } from '../utils/auth';
 import socket from '../utils/socket';
+import API from '../utils/api';
+import { UserContext } from '../contexts/user';
 
 const MessageForm = styled(Form)`
   padding: 9px;
@@ -12,23 +12,16 @@ const MessageForm = styled(Form)`
 
 function MessageInput({ channelId }) {
   const input = useRef(null);
+  const [user] = useContext(UserContext);
   let timeout;
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        '/api/messages',
-        {
-          text: input.current.value,
-          channel: channelId,
-        },
-        {
-          headers: {
-            'x-auth-token': getJwt(),
-          },
-        },
-      );
+      const response = await API.post('messages', {
+        text: input.current.value,
+        channel: channelId,
+      });
       const message = response.data;
       console.log(message);
       socket.emit('send message', {
@@ -47,7 +40,7 @@ function MessageInput({ channelId }) {
 
   function handleChange() {
     socket.emit('typing', {
-      username: getCurrentUser().username,
+      username: user.username,
       channelId,
     });
     clearTimeout(timeout);

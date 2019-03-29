@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { Dropdown, Image, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { ListItem, List } from './styles/List';
-import { getCurrentUser } from '../utils/auth';
 import AddChannel from './AddChannel';
+import { UserContext } from '../contexts/user';
 
 const ChannelsList = styled.div`
   margin: 15px 0;
@@ -13,16 +13,9 @@ const ChannelsList = styled.div`
   }
 `;
 
-const trigger = (
-  <span>
-    <Image avatar src={getCurrentUser() && getCurrentUser().gravatar} />
-    {getCurrentUser() && getCurrentUser().username}
-  </span>
-);
-
 const options = [
   { key: 'user', text: 'Account', icon: 'user' },
-  // { key: 'settings', text: 'Settings', icon: 'settings' },
+  { key: 'settings', text: 'Settings', icon: 'settings' },
   {
     key: 'sign-out',
     text: 'Sign Out',
@@ -33,7 +26,7 @@ const options = [
 ];
 
 const StyledSideBar = styled.div`
-  flex: 0 0 20%;
+  flex-basis: 20%;
   padding: 15px;
   color: #fff;
   background-color: #2185d0;
@@ -51,9 +44,19 @@ const CustomLink = ({ to, children }) => (
 );
 
 function Sidebar({ users, channels, handleAddChannel, match }) {
+  const [user] = useContext(UserContext);
+  console.log(user);
   return (
     <StyledSideBar>
-      <Dropdown trigger={trigger} options={options} />
+      <Dropdown
+        trigger={
+          <span>
+            <Image avatar src={user.gravatar} />
+            {user.username}
+          </span>
+        }
+        options={options}
+      />
       <ChannelsList>
         <h3>Channels</h3>
         <List>

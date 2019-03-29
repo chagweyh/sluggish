@@ -7,7 +7,6 @@ describe('user.generateToken', () => {
   it('should return a valid JWT', async () => {
     const payload = {
       _id: mongoose.Types.ObjectId().toHexString(),
-      email: 'hello@hello.com',
     };
     const user = new User(payload);
     const token = await user.generateToken();

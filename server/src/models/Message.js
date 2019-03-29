@@ -1,32 +1,33 @@
 import mongoose from 'mongoose';
 import Joi from 'joi';
 
-const messageSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-  createdBy: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  channel: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Channel',
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  readBy: [
-    {
+const messageSchema = new mongoose.Schema(
+  {
+    text: {
+      type: String,
+      required: true,
+    },
+    createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
+      required: true,
     },
-  ],
-});
+    channel: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Channel',
+      required: true,
+    },
+    readBy: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+  },
+);
 
 function autopopulate(next) {
   // this.populate('createdBy', 'username _id gravatar');

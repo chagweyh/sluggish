@@ -1,45 +1,43 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import axios from 'axios';
-import Loading from './Loading';
+import React, { useState, useEffect } from 'react';
 import ChannelInfo from './ChannelInfo';
+import API from '../utils/api';
 import Messages from './Messages';
 import styled, { css } from 'styled-components/macro';
 import MessageInput from './MessageInput';
 import socket from '../utils/socket';
-import { Loader } from 'semantic-ui-react';
 import { Placeholder } from 'semantic-ui-react';
+import ChannelDetails from './ChannelDetails';
 
 const PlaceholderExample = () => (
   <Placeholder>
-    <Placeholder.Header image>
-      <Placeholder.Line />
-      <Placeholder.Line />
-    </Placeholder.Header>
-    <Placeholder.Paragraph>
-      <Placeholder.Line />
-      <Placeholder.Line />
-      <Placeholder.Line />
-      <Placeholder.Line />
-    </Placeholder.Paragraph>
+    <Placeholder.Line />
+    <Placeholder.Line />
+    <Placeholder.Line />
+    <Placeholder.Line />
   </Placeholder>
 );
 
 const Main = styled.div`
-  flex: 0 0 80%;
+  flex-basis: 80%;
 `;
 
-const ChannelContent = styled.div`
+const StyledChannel = styled.div`
   height: 100vh;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
 `;
 
-const ChannelDetails = styled.div`
-  height: 100vh;
+const ChannelContent = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: 100%;
   justify-content: flex-end;
+  ${(props) =>
+    props.details &&
+    css`
+      flex-basis: 75%;
+    `};
 `;
 
 function Channel({ match }) {
@@ -47,6 +45,10 @@ function Channel({ match }) {
   const [info, setInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [details, setDetails] = useState(true);
+
+  const toggleDetails = () => setDetails(!details);
+
   const channelId = match.params.channelId;
 
   useEffect(() => {
@@ -54,7 +56,7 @@ function Channel({ match }) {
       try {
         setIsLoading(true);
         setIsError(false);
-        const response = await axios.get(`/api/channels/${channelId}`);
+        const response = await API.get(`/channels/${channelId}`);
         setChannel(response.data);
       } catch (err) {
         setIsError(true);
@@ -64,6 +66,12 @@ function Channel({ match }) {
     };
     fetchChannelData();
   }, [channelId]);
+
+  useEffect(() => {
+    if (channel) {
+      document.title = `${channel.name} | Mini Slack Clone`;
+    }
+  }, [channel, channelId]);
 
   useEffect(() => {
     socket.on('send message', (data) => {
@@ -79,7 +87,6 @@ function Channel({ match }) {
       if (!data) {
         setInfo(null);
       } else {
-        // const { username, channel } = data;
         // verify if the sender and the receiver of
         // the message are on the same channel or not
         data.channelId === channelId ? setInfo(`${data.username} is typing a message`) : setInfo(null);
@@ -96,13 +103,22 @@ function Channel({ match }) {
       {isLoading ? (
         <PlaceholderExample />
       ) : (
-        <ChannelContent>
-          <ChannelInfo channel={channel} />
-          <ChannelDetails>
-            <Messages info={info} channelId={channelId} messages={channel.messages} />
-            <MessageInput channelId={channelId} />
-          </ChannelDetails>
-        </ChannelContent>
+        <StyledChannel>
+          <ChannelInfo channel={channel} details={details} handleClick={toggleDetails} />
+          <div
+            css={`
+              display: flex;
+              flex-direction: row;
+              height: inherit;
+            `}
+          >
+            <ChannelContent details={details}>
+              <Messages info={info} channelId={channelId} messages={channel.messages} />
+              <MessageInput channelId={channelId} />
+            </ChannelContent>
+            {details && <ChannelDetails channel={channel} handleClick={toggleDetails} />}
+          </div>
+        </StyledChannel>
       )}
     </Main>
   );

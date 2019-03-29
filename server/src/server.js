@@ -5,6 +5,7 @@ import logger from './utils/logging';
 import app from './app';
 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 mongoose.connect(config.get('db'), { useNewUrlParser: true });
 mongoose.connection.on('error', (err) => {
   logger.error(err.message);

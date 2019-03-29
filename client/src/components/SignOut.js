@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-function SignOut() {
+function SignOut({ history }) {
   useEffect(() => {
     localStorage.removeItem('token');
-    window.location = '/';
+    history.push('/');
   });
   return null;
 }

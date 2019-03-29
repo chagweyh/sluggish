@@ -11,11 +11,11 @@ export async function signUp(req, res) {
   await user.save();
 
   const token = await user.generateToken();
-  const { _id, username, email, gravatar } = user;
+  const { _id, username, email } = user;
   return res
     .header('x-auth-token', token)
     .status(201)
-    .send({ _id, username, email, gravatar });
+    .send({ _id, username, email });
 }
 
 export async function getUser(req, res) {
@@ -29,8 +29,9 @@ export async function getUsers(req, res) {
   return res.status(200).json(users);
 }
 
-export function getAccount(req, res) {
-  return res.status(200).send(req.user);
+export async function getAccount(req, res) {
+  const user = await User.findById(req.user._id).select('-password');
+  return res.status(200).send(user);
 }
 
 export function validateUser(req, res, next) {

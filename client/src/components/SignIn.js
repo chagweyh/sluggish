@@ -4,11 +4,11 @@ import * as yup from 'yup';
 import { Button, Form, Header, Segment, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Errors from './Errors';
-import axios from 'axios';
+import API from '../utils/api';
 import { FormContainer, FormWrapper } from './styles/Form';
 import { getCurrentUser } from '../utils/auth';
 
-function SignIn() {
+function SignIn(props) {
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -57,9 +57,9 @@ function SignIn() {
     if (validationErrors) return;
 
     try {
-      const response = await axios.post('/api/signin', form);
+      const response = await API.post('/api/signin', form);
       localStorage.setItem('token', response.data);
-      window.location = '/chat';
+      props.history.push('/chat');
     } catch (error) {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
