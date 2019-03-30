@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { FormContainer, FormWrapper } from './styles/Form';
 import Errors from './Errors';
-import axios from 'axios';
+import API from '../utils/api';
 
 function SignUp(props) {
   const [form, setValues] = useState({
@@ -61,7 +61,7 @@ function SignUp(props) {
     if (validationErrors) return;
 
     try {
-      const response = await axios.post('/api/signup', form);
+      const response = await API.post('/signup', form);
       localStorage.setItem('token', response.headers['x-auth-token']);
       props.history.push('/chat');
     } catch (error) {

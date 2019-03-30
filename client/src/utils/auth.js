@@ -5,6 +5,7 @@ function getCurrentUser() {
     const jwt = localStorage.getItem('token');
     return jwtDecode(jwt);
   } catch (error) {
+    localStorage.removeItem('token');
     return null;
   }
 }
