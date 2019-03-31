@@ -15,7 +15,7 @@ function MessageInput({ channelId }) {
   const [user] = useContext(UserContext);
   let timeout;
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await API.post('messages', {
@@ -23,7 +23,6 @@ function MessageInput({ channelId }) {
         channel: channelId,
       });
       const message = response.data;
-      console.log(message);
       socket.emit('send message', {
         message,
         channelId,
@@ -32,20 +31,20 @@ function MessageInput({ channelId }) {
       console.log(error.message);
     }
     input.current.value = '';
-  }
+  };
 
-  function stoppedTyping() {
+  const stoppedTyping = () => {
     socket.emit('typing', null);
-  }
+  };
 
-  function handleChange() {
+  const handleChange = () => {
     socket.emit('typing', {
       username: user.username,
       channelId,
     });
     clearTimeout(timeout);
     timeout = setTimeout(stoppedTyping, 2000);
-  }
+  };
 
   return (
     <MessageForm onSubmit={handleSubmit} autoComplete="off">

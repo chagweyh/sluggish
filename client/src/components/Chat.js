@@ -47,11 +47,12 @@ function Chat({ match, location }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleAddChannel(channel) {
+  const handleAddChannel = (channel) => {
     setChannels((prevState) => [...prevState, channel]);
-  }
+  };
 
   if (error) {
+    console.error(error);
     return <h1>error...</h1>;
   }
 

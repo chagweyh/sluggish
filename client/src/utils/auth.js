@@ -1,17 +1,15 @@
 import jwtDecode from 'jwt-decode';
 
-function getCurrentUser() {
+export function isTokenExpired() {
   try {
-    const jwt = localStorage.getItem('token');
-    return jwtDecode(jwt);
-  } catch (error) {
-    localStorage.removeItem('token');
-    return null;
+    const decoded_jwt = jwtDecode(getJwt());
+    const current_time = Date.now().valueOf() / 1000;
+    return current_time > decoded_jwt.exp;
+  } catch (err) {
+    return true;
   }
 }
 
-function getJwt() {
+export function getJwt() {
   return localStorage.getItem('token') || null;
 }
-
-export { getCurrentUser, getJwt };

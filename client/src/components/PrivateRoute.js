@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { getCurrentUser } from '../utils/auth';
+import { isTokenExpired } from '../utils/auth';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (getCurrentUser() ? <Component {...props} /> : <Redirect to="/" />)} />
+  <Route {...rest} render={(props) => (isTokenExpired() ? <Redirect to="/" /> : <Component {...props} />)} />
 );
 
 export default PrivateRoute;

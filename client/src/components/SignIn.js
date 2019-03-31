@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Errors from './Errors';
 import API from '../utils/api';
 import { FormContainer, FormWrapper } from './styles/Form';
-import { getCurrentUser } from '../utils/auth';
+import { isTokenExpired } from '../utils/auth';
 
 function SignIn(props) {
   const [form, setForm] = useState({
@@ -15,12 +15,12 @@ function SignIn(props) {
   });
   const [errors, setErrors] = useState(null);
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-  }
+  };
 
   const schema = yup.object().shape({
     email: yup
@@ -36,7 +36,7 @@ function SignIn(props) {
       .required(),
   });
 
-  async function validateForm() {
+  const validateForm = async () => {
     try {
       await schema.validate(form, { abortEarly: false });
     } catch ({ inner }) {
@@ -48,25 +48,25 @@ function SignIn(props) {
         {},
       );
     }
-  }
+  };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = await validateForm();
     setErrors(validationErrors);
     if (validationErrors) return;
 
     try {
-      const response = await API.post('/api/signin', form);
+      const response = await API.post('/signin', form);
       localStorage.setItem('token', response.data);
       props.history.push('/chat');
     } catch (error) {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
     }
-  }
+  };
 
-  if (getCurrentUser()) return <Redirect to="/chat" />;
+  if (!isTokenExpired()) return <Redirect to="/chat" />;
 
   return (
     <FormContainer>

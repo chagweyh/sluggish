@@ -45,7 +45,6 @@ const CustomLink = ({ to, children }) => (
 
 function Sidebar({ users, channels, handleAddChannel, match }) {
   const [user] = useContext(UserContext);
-  console.log(user);
   return (
     <StyledSideBar>
       <Dropdown

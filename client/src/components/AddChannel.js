@@ -27,7 +27,7 @@ function AddChannel({ users, handleAddChannel }) {
     console.log(form);
   };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       console.log(form);
@@ -36,11 +36,10 @@ function AddChannel({ users, handleAddChannel }) {
       setForm(formInitialState);
       setOpen(false);
       handleAddChannel(channel);
-      console.log(channel);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <Modal

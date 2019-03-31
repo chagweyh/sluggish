@@ -49,7 +49,7 @@ userSchema.methods.generateToken = async function() {
       _id: this.id,
     },
     config.get('jwt_key'),
-    { expiresIn: '24h' },
+    { expiresIn: '7d' },
   );
   return token;
 };

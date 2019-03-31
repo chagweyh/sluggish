@@ -40,7 +40,7 @@ function SignUp(props) {
       .required(),
   });
 
-  async function validateForm() {
+  const validateForm = async () => {
     try {
       await schema.validate(form, { abortEarly: false });
     } catch ({ inner }) {
@@ -52,14 +52,13 @@ function SignUp(props) {
         {},
       );
     }
-  }
+  };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = await validateForm();
     setErrors(validationErrors);
     if (validationErrors) return;
-
     try {
       const response = await API.post('/signup', form);
       localStorage.setItem('token', response.headers['x-auth-token']);
@@ -68,7 +67,7 @@ function SignUp(props) {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
     }
-  }
+  };
 
   return (
     <FormContainer>
