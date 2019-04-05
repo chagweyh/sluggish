@@ -2,4 +2,4 @@
 /logs
 /dist
 .vscode
-config
+/config

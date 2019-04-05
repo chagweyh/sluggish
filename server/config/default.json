@@ -1,5 +1,0 @@
-{
-  "db": "mongodb://haythem:haythem123456@ds115874.mlab.com:15874/mini-slack-clone",
-  "port": "8080",
-  "jwt_key": "12345"
-}
