@@ -36,12 +36,11 @@ channelSchema.virtual('messages', {
 
 function autopopulate(next) {
   this.populate('messages createdBy');
-  // this.populate('createdBy', 'username');
   next();
 }
 
 channelSchema.pre('findOne', autopopulate);
-// channelSchema.pre('find', autopopulate);
+channelSchema.pre('find', autopopulate);
 
 const Channel = mongoose.model('Channel', channelSchema);
 
@@ -54,7 +53,6 @@ const validateChannel = (channel) => {
     purpose: Joi.string()
       .min(5)
       .max(255),
-    // members: Joi.array().items(Joi.objectId()),
     members: Joi.array(),
     private: Joi.boolean(),
   };

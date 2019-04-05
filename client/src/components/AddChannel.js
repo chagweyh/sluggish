@@ -24,13 +24,11 @@ function AddChannel({ users, handleAddChannel }) {
       ...form,
       [data.name]: data.value || data.checked,
     });
-    console.log(form);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(form);
       const response = await API.post('/channels', form);
       const channel = response.data;
       setForm(formInitialState);

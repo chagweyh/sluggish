@@ -1,5 +1,12 @@
 import express from 'express';
-import { getChannels, getChannel, addChannel, starChannel, validateChannel } from '../controllers/channelController';
+import {
+  getChannels,
+  getChannel,
+  addChannel,
+  deleteChannel,
+  starChannel,
+  validateChannel,
+} from '../controllers/channelController';
 import { signUp, getUser, getUsers, getAccount, validateUser } from '../controllers/userController';
 import { signIn, validateAuth, isLoggedIn } from '../controllers/authController';
 import { addMessage, validateMessage } from '../controllers/messageController';
@@ -17,9 +24,9 @@ router.get('/users/:id', validateObjectId, getUser);
 router.get('/channels', getChannels);
 router.get('/channels/:id', validateObjectId, getChannel);
 router.post('/channels', [isLoggedIn, validateChannel], addChannel);
+router.post('/channels/:id/star', isLoggedIn, starChannel);
+router.delete('/channels/:id', [isLoggedIn, validateObjectId], deleteChannel);
 
 router.post('/messages', [isLoggedIn, validateMessage], addMessage);
-
-router.post('/channels/:id/star', isLoggedIn, starChannel);
 
 export default router;
