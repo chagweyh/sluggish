@@ -1,8 +1,7 @@
 import { Message, validate } from '../models/Message';
 
 export async function addMessage(req, res) {
-  const createdBy = req.user._id;
-  const message = new Message({ ...req.body, createdBy });
+  const message = new Message({ ...req.body, createdBy: req.user._id });
   await message.save();
   await message.populate('createdBy', '-password').execPopulate();
   return res.status(201).json(message);
