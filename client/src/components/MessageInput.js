@@ -1,31 +1,22 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef } from 'react';
 import { Form } from 'semantic-ui-react';
-import styled from 'styled-components';
-import socket from '../utils/socket';
-import API from '../utils/api';
-import { UserContext } from '../contexts/user';
+import styled from 'styled-components/macro';
+import socket from '../helpers/socket';
+import { addMessage } from '../API/ChannelsAPI';
 
-const MessageForm = styled(Form)`
-  padding: 9px;
-  border-top: 1px solid #e8e4e4;
-`;
-
-function MessageInput({ channelId }) {
+export default function MessageInput({ channel, user }) {
   const input = useRef(null);
-  const [user] = useContext(UserContext);
   let timeout;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const response = await API.post('messages', {
-        text: input.current.value,
-        channel: channelId,
-      });
+      const response = await addMessage(channel.id, input.current.value);
       const message = response.data;
+      console.log(message);
       socket.emit('send message', {
         message,
-        channelId,
+        sentFrom: channel.slug,
       });
     } catch (error) {
       console.log(error.message);
@@ -40,7 +31,7 @@ function MessageInput({ channelId }) {
   const handleChange = () => {
     socket.emit('typing', {
       username: user.username,
-      channelId,
+      sentFrom: channel.slug,
     });
     clearTimeout(timeout);
     timeout = setTimeout(stoppedTyping, 2000);
@@ -59,4 +50,7 @@ function MessageInput({ channelId }) {
   );
 }
 
-export default MessageInput;
+const MessageForm = styled(Form)`
+  padding: 9px;
+  border-top: 1px solid #e8e4e4;
+`;

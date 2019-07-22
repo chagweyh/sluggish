@@ -1,7 +1,35 @@
 import React, { useEffect, useRef } from 'react';
 import { distanceInWordsToNow } from 'date-fns';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import Feedback from './Feedback';
+
+export default function Messages({ messages, info }) {
+  const messagesEl = useRef(null);
+  useEffect(() => {
+    // scroll to the bottom
+    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
+  });
+
+  return (
+    <StyledMessages ref={messagesEl}>
+      {messages.map((message) => (
+        <Message key={message._id}>
+          <Avatar src={message.createdBy.gravatar} />
+          <MessageInfo>
+            <Username>{message.createdBy.username}</Username>
+            <MessageDate>
+              {distanceInWordsToNow(new Date(message.createdAt), {
+                addSuffix: true,
+              })}
+            </MessageDate>
+            <MessageText>{message.text}</MessageText>
+          </MessageInfo>
+        </Message>
+      ))}
+      {info && <Feedback text={info} />}
+    </StyledMessages>
+  );
+}
 
 const StyledMessages = styled.div`
   padding: 10px 20px;
@@ -42,33 +70,3 @@ const MessageText = styled.p`
   margin: 0;
   font-size: 15px;
 `;
-
-function Messages({ messages, info }) {
-  const messagesEl = useRef(null);
-  useEffect(() => {
-    // scroll to the bottom
-    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
-  });
-
-  return (
-    <StyledMessages ref={messagesEl}>
-      {messages.map((message) => (
-        <Message key={message._id}>
-          <Avatar src={message.createdBy.gravatar} />
-          <MessageInfo>
-            <Username>{message.createdBy.username}</Username>
-            <MessageDate>
-              {distanceInWordsToNow(new Date(message.createdAt), {
-                addSuffix: true,
-              })}
-            </MessageDate>
-            <MessageText>{message.text}</MessageText>
-          </MessageInfo>
-        </Message>
-      ))}
-      {info && <Feedback text={info} />}
-    </StyledMessages>
-  );
-}
-
-export default Messages;

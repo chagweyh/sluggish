@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { Popup, Icon, Input } from 'semantic-ui-react';
-import { UserContext } from '../contexts/user';
-import API from '../utils/api';
+import { Popup, Icon, Input, Dropdown } from 'semantic-ui-react';
+import { useAppState } from '../contexts/user';
+import { starChannel } from '../API/ChannelsAPI';
 
 const StyledInfo = styled.div`
   position: sticky;
@@ -18,18 +18,28 @@ const StyledInfo = styled.div`
 `;
 
 function ChannelInfo({ channel, details, handleClick }) {
-  const [user, dispatch] = useContext(UserContext);
-  const [starred, setStarred] = useState(user.stars && user.stars.includes(channel.id));
+  const {
+    state: { user },
+    dispatch,
+  } = useAppState();
+  const [starred, setStarred] = useState(
+    user.stars && user.stars.includes(channel.id),
+  );
+
   const handleStarClick = async () => {
     try {
       starred
         ? dispatch({ type: 'UNSTAR_CHANNEL', channel: channel.id })
         : dispatch({ type: 'STAR_CHANNEL', channel: channel.id });
       setStarred(!starred);
-      await API.post(`channels/${channel.id}/star`);
-    } catch (err) {
-      console.log(err);
+      await starChannel(channel.id);
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  const handleDropdownClick = (e) => {
+    console.log(e);
   };
 
   return (
@@ -61,11 +71,25 @@ function ChannelInfo({ channel, details, handleClick }) {
         <Popup
           inverted
           trigger={
-            <Icon color={details ? 'blue' : 'black'} name="info circle" size="large" link onClick={handleClick} />
+            <Icon
+              color={details ? 'blue' : 'black'}
+              name="info circle"
+              size="large"
+              link
+              onClick={handleClick}
+            />
           }
           content={details ? 'Hide Channel Details' : 'Show Channel Details'}
         />
-        <Icon name="setting" size="large" link />
+        {/* <Icon name="setting" size="large" link /> */}
+        <Dropdown icon="setting" size="large" className="icon">
+          <Dropdown.Menu onClick={handleDropdownClick}>
+            <Dropdown.Item icon="edit" text="Edit channel" />
+            <Dropdown.Item icon="edit" text="Invite new members to join..." />
+            <Dropdown.Item icon="trash" text="Leave channel" />
+            <Dropdown.Item icon="trash" text="Delete channel" />
+          </Dropdown.Menu>
+        </Dropdown>
         <Input icon="search" iconPosition="left" placeholder="Search..." />
       </div>
     </StyledInfo>

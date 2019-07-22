@@ -38,7 +38,8 @@ function ChannelDetails({ channel, handleClick }) {
         <div>
           <h4>Created</h4>
           <p>
-            Created by {channel.createdBy.username} on {format(new Date(channel.createdAt), 'MMMM DD, YYYY')}
+            Created by {channel.createdBy.username} on{' '}
+            {format(new Date(channel.createdAt), 'MMMM DD, YYYY')}
           </p>
         </div>
       </div>

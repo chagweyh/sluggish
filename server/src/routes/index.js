@@ -1,32 +1,14 @@
 import express from 'express';
-import {
-  getChannels,
-  getChannel,
-  addChannel,
-  deleteChannel,
-  starChannel,
-  validateChannel,
-} from '../controllers/channelController';
-import { signUp, getUser, getUsers, getAccount, validateUser } from '../controllers/userController';
-import { signIn, validateAuth, isLoggedIn } from '../controllers/authController';
-import { addMessage, validateMessage } from '../controllers/messageController';
-import validateObjectId from '../utils/validateObjectId';
+import auth from '../api/auth/auth.routes';
+import channels from '../api/channels/channels.routes';
+import messages from '../api/messages/messages.routes';
+import users from '../api/users/users.routes';
 
 const router = express.Router();
 
-router.post('/signin', validateAuth, signIn);
-router.post('/signup', validateUser, signUp);
-
-router.get('/users', getUsers);
-router.get('/users/me', isLoggedIn, getAccount);
-router.get('/users/:id', validateObjectId, getUser);
-
-router.get('/channels', getChannels);
-router.get('/channels/:id', validateObjectId, getChannel);
-router.post('/channels', [isLoggedIn, validateChannel], addChannel);
-router.post('/channels/:id/star', isLoggedIn, starChannel);
-router.delete('/channels/:id', [isLoggedIn, validateObjectId], deleteChannel);
-
-router.post('/messages', [isLoggedIn, validateMessage], addMessage);
+router.use('/auth', auth);
+router.use('/channels', channels);
+router.use('/messages', messages);
+router.use('/users', users);
 
 export default router;

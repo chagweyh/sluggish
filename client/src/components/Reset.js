@@ -10,8 +10,20 @@ const Reset = () => (
       </Header>
       <Form>
         <Segment stacked>
-          <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
-          <Form.Input fluid icon="lock" iconPosition="left" placeholder="Confirm password" type="password" />
+          <Form.Input
+            fluid
+            icon="lock"
+            iconPosition="left"
+            placeholder="Password"
+            type="password"
+          />
+          <Form.Input
+            fluid
+            icon="lock"
+            iconPosition="left"
+            placeholder="Confirm password"
+            type="password"
+          />
           <Button color="blue" fluid size="large">
             Reset Password
           </Button>

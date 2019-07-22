@@ -1,27 +1,34 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components/macro';
 
-const List = styled.ul`
+export const List = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
 `;
 
-const ListItem = styled.li`
+export const Label = styled.div`
+  float: right;
+  padding: 0 6px;
+  border-radius: 7px;
+  border-style: solid;
+  border-width: 1px;
+`;
+
+export const ListItem = styled.li`
   a {
     padding: 4px;
     color: #fff;
     display: block;
-    ${(props) =>
-      props.active &&
-      css`
-        background: #f1c40f;
-        color: #000;
-      `};
-    &:hover {
+    &:hover,
+    &.active {
       background: #f1c40f;
       color: #000;
+      ${Label} {
+        border-color: #000;
+      }
     }
   }
+  ${Label} {
+    border-color: ${(props) => (props.active ? '#000' : '#fff')};
+  }
 `;
-
-export { List, ListItem };

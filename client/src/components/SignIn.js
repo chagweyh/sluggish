@@ -1,78 +1,62 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import * as yup from 'yup';
 import { Button, Form, Header, Segment, Grid } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import Errors from './Errors';
-import API from '../utils/api';
 import { FormContainer, FormWrapper } from './styles/Form';
-import { isTokenExpired } from '../utils/auth';
+import { login } from '../API/AuthAPI';
+import { useAppState } from '../contexts/user';
+import { validateForm } from '../utils';
 
-function SignIn(props) {
+const SignInSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .min(5)
+    .max(255)
+    .required(),
+});
+
+function SignIn() {
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
   const [errors, setErrors] = useState(null);
+  const { dispatch } = useAppState();
 
-  const handleChange = (e) => {
+  const handleChange = (event) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [event.target.name]: event.target.value,
     });
   };
 
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .min(5)
-      .max(255)
-      .required()
-      .email(),
-    password: yup
-      .string()
-      .min(5)
-      .max(255)
-      .required(),
-  });
-
-  const validateForm = async () => {
-    try {
-      await schema.validate(form, { abortEarly: false });
-    } catch ({ inner }) {
-      return inner.reduce(
-        (errors, error) => ({
-          ...errors,
-          [`${error.name}-${error.path}`]: error.message,
-        }),
-        {},
-      );
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const validationErrors = await validateForm(form, SignInSchema);
+    if (validationErrors) {
+      setErrors(validationErrors);
+      return;
     }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = await validateForm();
-    setErrors(validationErrors);
-    if (validationErrors) return;
-
     try {
-      const response = await API.post('/signin', form);
-      localStorage.setItem('token', response.data);
-      props.history.push('/chat');
+      await login(form.email, form.password);
+      dispatch({ type: 'LOGIN' });
     } catch (error) {
+      console.log(error.response);
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });
     }
   };
 
-  if (!isTokenExpired()) return <Redirect to="/chat" />;
-
   return (
     <FormContainer>
       <FormWrapper>
         <Header as="h2" color="blue">
-          Sign in to your account
+          Sign in to your account!
         </Header>
         <Form autoComplete="off" onSubmit={handleSubmit}>
           <Segment stacked>

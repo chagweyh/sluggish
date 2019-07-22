@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { FormContainer, FormWrapper } from './styles/Form';
 
 function Reset() {
@@ -12,7 +12,13 @@ function Reset() {
         </Header>
         <Form>
           <Segment stacked>
-            <Form.Input fluid icon="mail" iconPosition="left" placeholder="Email" type="email" />
+            <Form.Input
+              fluid
+              icon="mail"
+              iconPosition="left"
+              placeholder="Email"
+              type="email"
+            />
             <Button color="blue" fluid size="large">
               Get Reset Link
             </Button>

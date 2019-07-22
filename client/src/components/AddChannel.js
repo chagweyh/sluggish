@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Header, Icon, Modal, Input, Form, Checkbox } from 'semantic-ui-react';
-import API from '../utils/api';
+import {
+  Button,
+  Header,
+  Icon,
+  Modal,
+  Input,
+  Form,
+  Checkbox,
+} from 'semantic-ui-react';
+import { addChannel } from '../API/ChannelsAPI';
 
 function AddChannel({ users, handleAddChannel }) {
   const [open, setOpen] = useState(false);
@@ -19,7 +27,7 @@ function AddChannel({ users, handleAddChannel }) {
     image: { avatar: true, src: user.gravatar },
   }));
 
-  const handleChange = (e, data) => {
+  const handleChange = (event, data) => {
     setForm({
       ...form,
       [data.name]: data.value || data.checked,
@@ -29,7 +37,7 @@ function AddChannel({ users, handleAddChannel }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await API.post('/channels', form);
+      const response = await addChannel(form);
       const channel = response.data;
       setForm(formInitialState);
       setOpen(false);
@@ -52,9 +60,16 @@ function AddChannel({ users, handleAddChannel }) {
       // closeOnDimmerClick={false}
       onClose={() => setOpen(false)}
     >
-      <Header content={form.private ? 'Create a private channel' : 'Create a channel'} />
+      <Header
+        content={form.private ? 'Create a private channel' : 'Create a channel'}
+      />
       <Modal.Content>
-        <Form size="large" method="post" id="addChannel" onSubmit={handleSubmit}>
+        <Form
+          size="large"
+          method="post"
+          id="addChannel"
+          onSubmit={handleSubmit}
+        >
           <Form.Field>
             <Checkbox
               label={
@@ -82,7 +97,12 @@ function AddChannel({ users, handleAddChannel }) {
           </Form.Field>
           <Form.Field>
             <label htmlFor="purpose">Purpose</label>
-            <Input id="purpose" name="purpose" value={form.purpose} onChange={handleChange} />
+            <Input
+              id="purpose"
+              name="purpose"
+              value={form.purpose}
+              onChange={handleChange}
+            />
           </Form.Field>
           <Form.Field>
             <label htmlFor="invite_members">Send invites to</label>

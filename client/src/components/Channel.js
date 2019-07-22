@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ChannelInfo from './ChannelInfo';
-import API from '../utils/api';
 import Messages from './Messages';
 import styled, { css } from 'styled-components/macro';
 import MessageInput from './MessageInput';
-import socket from '../utils/socket';
+import socket from '../helpers/socket';
 import { Placeholder } from 'semantic-ui-react';
 import ChannelDetails from './ChannelDetails';
+import { getChannel } from '../API/ChannelsAPI';
 
 const PlaceholderExample = () => (
   <Placeholder>
@@ -16,10 +16,6 @@ const PlaceholderExample = () => (
     <Placeholder.Line />
   </Placeholder>
 );
-
-const Main = styled.div`
-  flex-basis: 80%;
-`;
 
 const StyledChannel = styled.div`
   height: 100vh;
@@ -40,7 +36,7 @@ const ChannelContent = styled.div`
     `};
 `;
 
-function Channel({ match }) {
+function Channel({ slug, user }) {
   const [channel, setChannel] = useState(null);
   const [info, setInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,14 +45,12 @@ function Channel({ match }) {
 
   const toggleDetails = () => setDetails(!details);
 
-  const channelId = match.params.channelId;
-
   useEffect(() => {
     const fetchChannelData = async () => {
       try {
         setIsLoading(true);
         setIsError(false);
-        const response = await API.get(`/channels/${channelId}`);
+        const response = await getChannel(slug);
         setChannel(response.data);
       } catch (err) {
         setIsError(true);
@@ -65,19 +59,22 @@ function Channel({ match }) {
       }
     };
     fetchChannelData();
-  }, [channelId]);
+  }, [slug]);
 
   useEffect(() => {
     if (channel) {
       document.title = `${channel.name} | Mini Slack Clone`;
     }
-  }, [channel, channelId]);
+  }, [channel]);
 
   useEffect(() => {
     socket.on('send message', (data) => {
-      if (channel && data.channelId === channelId) {
+      if (channel && data.sentFrom === slug) {
         const updatedMessages = [...channel.messages, data.message];
-        setChannel((prevState) => ({ ...prevState, messages: updatedMessages }));
+        setChannel((prevState) => ({
+          ...prevState,
+          messages: updatedMessages,
+        }));
       }
     });
   });
@@ -89,7 +86,9 @@ function Channel({ match }) {
       } else {
         // verify if the sender and the receiver of
         // the message are on the same channel or not
-        data.channelId === channelId ? setInfo(`${data.username} is typing a message`) : setInfo(null);
+        data.sentFrom === slug
+          ? setInfo(`${data.username} is typing a message`)
+          : setInfo(null);
       }
     });
   });
@@ -98,29 +97,32 @@ function Channel({ match }) {
     return <div>something went wrong...</div>;
   }
 
-  return (
-    <Main>
-      {isLoading ? (
-        <PlaceholderExample />
-      ) : (
-        <StyledChannel>
-          <ChannelInfo channel={channel} details={details} handleClick={toggleDetails} />
-          <div
-            css={`
-              display: flex;
-              flex-direction: row;
-              height: inherit;
-            `}
-          >
-            <ChannelContent details={details}>
-              <Messages info={info} channelId={channelId} messages={channel.messages} />
-              <MessageInput channelId={channelId} />
-            </ChannelContent>
-            {details && <ChannelDetails channel={channel} handleClick={toggleDetails} />}
-          </div>
-        </StyledChannel>
-      )}
-    </Main>
+  return isLoading ? (
+    <PlaceholderExample />
+  ) : (
+    <StyledChannel>
+      <ChannelInfo
+        channel={channel}
+        details={details}
+        handleClick={toggleDetails}
+        user={user}
+      />
+      <div
+        css={`
+          display: flex;
+          flex-direction: row;
+          height: inherit;
+        `}
+      >
+        <ChannelContent details={details}>
+          <Messages info={info} messages={channel.messages} />
+          <MessageInput channel={channel} user={user} />
+        </ChannelContent>
+        {details && (
+          <ChannelDetails channel={channel} handleClick={toggleDetails} />
+        )}
+      </div>
+    </StyledChannel>
   );
 }
 

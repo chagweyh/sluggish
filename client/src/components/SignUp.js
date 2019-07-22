@@ -1,18 +1,39 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import * as yup from 'yup';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { FormContainer, FormWrapper } from './styles/Form';
 import Errors from './Errors';
-import API from '../utils/api';
+import { useAppState } from '../contexts/user';
+import { register } from '../API/AuthAPI';
+import { validateForm } from '../utils';
 
-function SignUp(props) {
+const SignUpSchema = yup.object().shape({
+  username: yup
+    .string()
+    .min(2)
+    .max(50)
+    .required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .min(5)
+    .max(255)
+    .required(),
+});
+
+function SignUp() {
   const [form, setValues] = useState({
     username: '',
     email: '',
     password: '',
   });
   const [errors, setErrors] = useState(null);
+
+  const { dispatch } = useAppState();
 
   const handleChange = (e) => {
     setValues({
@@ -21,48 +42,16 @@ function SignUp(props) {
     });
   };
 
-  const schema = yup.object().shape({
-    username: yup
-      .string()
-      .min(2)
-      .max(50)
-      .required(),
-    email: yup
-      .string()
-      .min(5)
-      .max(255)
-      .required()
-      .email(),
-    password: yup
-      .string()
-      .min(5)
-      .max(255)
-      .required(),
-  });
-
-  const validateForm = async () => {
-    try {
-      await schema.validate(form, { abortEarly: false });
-    } catch ({ inner }) {
-      return inner.reduce(
-        (errors, error) => ({
-          ...errors,
-          [`${error.name}-${error.path}`]: error.message,
-        }),
-        {},
-      );
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const validationErrors = await validateForm(form, SignUpSchema);
+    if (validationErrors) {
+      setErrors(validationErrors);
+      return;
     }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = await validateForm();
-    setErrors(validationErrors);
-    if (validationErrors) return;
     try {
-      const response = await API.post('/signup', form);
-      localStorage.setItem('token', response.headers['x-auth-token']);
-      props.history.push('/chat');
+      await register(form);
+      dispatch({ type: 'LOGIN' });
     } catch (error) {
       const { statusText, data } = error.response;
       setErrors({ [statusText]: data });

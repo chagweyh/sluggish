@@ -1,24 +1,31 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useContext } from 'react';
+import appReducer, { initialState } from '../reducers/appReducer';
+import { isTokenValid, setToken, TOKEN_KEY } from '../API/APIUtils';
+import { getLocalStorageValue } from '../utils';
+import { logout } from '../API/AuthAPI';
 
-const UserContext = React.createContext();
+const Context = React.createContext();
 
-function UserProvider({ children }) {
-  const contextValue = useReducer((state, action) => {
-    switch (action.type) {
-      case 'ADD_USER':
-        return action.user;
-      case 'STAR_CHANNEL':
-        return { ...state, stars: [...state.stars, action.channel] };
-      case 'UNSTAR_CHANNEL':
-        return Object.assign({}, state, {
-          stars: state.stars.filter((channel) => channel !== action.channel),
-        });
-      default:
-        return state;
+export function AppStateProvider({ children }) {
+  const [state, dispatch] = useReducer(appReducer, initialState);
+
+  React.useEffect(() => {
+    const token = getLocalStorageValue(TOKEN_KEY);
+
+    if (!token) return;
+
+    if (isTokenValid(token)) {
+      setToken(token);
+      dispatch({ type: 'LOGIN' });
+    } else {
+      dispatch({ type: 'LOGOUT' });
+      logout();
     }
-  }, {});
+  }, []);
 
-  return <UserContext.Provider value={contextValue} children={children} />;
+  return <Context.Provider value={{ state, dispatch }} children={children} />;
 }
 
-export { UserContext, UserProvider };
+export function useAppState() {
+  return useContext(Context);
+}
