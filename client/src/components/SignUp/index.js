@@ -2,28 +2,11 @@ import React, { useState } from 'react';
 import { Link } from '@reach/router';
 import * as yup from 'yup';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-import { FormContainer, FormWrapper } from './styles/Form';
-import Errors from './Errors';
-import { useAppState } from '../contexts/user';
-import { register } from '../API/AuthAPI';
-import { validateForm } from '../utils';
-
-const SignUpSchema = yup.object().shape({
-  username: yup
-    .string()
-    .min(2)
-    .max(50)
-    .required(),
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup
-    .string()
-    .min(5)
-    .max(255)
-    .required(),
-});
+import { FormContainer, FormWrapper } from '../styles/Form';
+import Errors from '../Errors';
+import { useAppState } from '../../contexts/app-context';
+import { register } from '../../API/AuthAPI';
+import { validateForm } from '../../utils';
 
 function SignUp() {
   const [form, setValues] = useState({
@@ -52,9 +35,9 @@ function SignUp() {
     try {
       await register(form);
       dispatch({ type: 'LOGIN' });
-    } catch (error) {
-      const { statusText, data } = error.response;
-      setErrors({ [statusText]: data });
+    } catch (err) {
+      const { data } = err.response;
+      setErrors([data]);
     }
   };
 
@@ -108,5 +91,22 @@ function SignUp() {
     </FormContainer>
   );
 }
+
+const SignUpSchema = yup.object().shape({
+  username: yup
+    .string()
+    .min(2)
+    .max(50)
+    .required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .min(5)
+    .max(255)
+    .required(),
+});
 
 export default SignUp;

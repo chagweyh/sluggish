@@ -34,29 +34,31 @@ describe('/api/channels', () => {
     });
   });
 
-  describe('GET /:id', () => {
-    it('should return a channel if valid id is passed', async () => {
+  describe('GET /:slug', () => {
+    it('should return a channel if valid slug is passed', async () => {
       const channel = new Channel({
         name: 'channel1',
         createdBy: mongoose.Types.ObjectId(),
       });
       await channel.save();
 
-      const res = await request(app).get(`/api/channels/${channel._id}`);
+      const res = await request(app).get(`/api/channels/${channel.slug}`);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('name', channel.name);
     });
 
-    it('should return 404 if invalid id is passed', async () => {
-      const res = await request(app).get('/api/channels/1');
+    // it('should return 404 if invalid id is passed', async () => {
+    //   const res = await request(app).get('/api/channels/1');
 
-      expect(res.status).toBe(404);
-    });
+    //   expect(res.status).toBe(404);
+    // });
 
-    it('should return 404 if no channel with the given id exists', async () => {
-      const id = mongoose.Types.ObjectId();
-      const res = await request(app).get(`/api/channels/${id}`);
+    it('should return 404 if no channel with the given slug exists', async () => {
+      const slug = Math.random()
+        .toString(36)
+        .substr(2, 5);
+      const res = await request(app).get(`/api/channels/${slug}`);
 
       expect(res.status).toBe(404);
     });
@@ -207,7 +209,6 @@ describe('/api/channels', () => {
     let token;
     let id;
     let user;
-    // let channel;
 
     const exec = async () => {
       return request(app)
@@ -227,20 +228,6 @@ describe('/api/channels', () => {
 
       id = mongoose.Types.ObjectId().toHexString();
 
-      // const data = [
-      //   {
-      //     name: 'channel1',
-      //   },
-      //   {
-      //     name: 'channel2',
-      //   },
-      // ];
-      // const channels = data.map(async (channel) => {
-      //   await new Channel({
-      //     name: channel.name,
-      //   }).save();
-      // });
-
       token = await generateAuthToken(user);
     });
     it('should return 401 if client is not logged in', async () => {
@@ -259,22 +246,14 @@ describe('/api/channels', () => {
       expect(res.status).toBe(404);
     });
 
-    // it('should return 404 if no channel with the given id was found', async () => {
-    //   id = mongoose.Types.ObjectId();
-
-    //   const res = await exec();
-
-    //   expect(res.status).toBe(404);
-    // });
-
     it('should favorite the channel', async () => {
       const { body, status } = await exec();
       expect(body.stars.length).toBe(1);
       expect(body.stars).toContain(id);
       expect(status).toBe(200);
     });
+
     it('should unfavorite the channel', async () => {
-      debugger;
       user = { ...user, stars: [id] };
       const { body, status } = await exec();
       expect(body.stars.length).toBe(0);

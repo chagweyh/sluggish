@@ -6,15 +6,15 @@ const sockets = {};
 sockets.init = (server) => {
   const io = socketio.listen(server);
 
-  io.on('connection', (client) => {
-    logger.info('made socket connection', client.id);
+  io.on('connection', (socket) => {
+    logger.info('made socket connection', socket.id);
 
-    client.on('send message', (message) => {
-      io.sockets.emit('send message', message);
+    socket.on('send message', (message) => {
+      io.emit('send message', message);
     });
 
-    client.on('typing', (data) => {
-      client.broadcast.emit('typing', data);
+    socket.on('typing', (data) => {
+      socket.broadcast.emit('typing', data);
     });
   });
 };

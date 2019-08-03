@@ -1,7 +1,7 @@
 import React from 'react';
-import LoggedOut from './LoggedOut';
-import LoggedIn from './LoggedIn';
-import { useAppState, AppStateProvider } from '../contexts/user';
+import LoggedOut from '../LoggedOut';
+import LoggedIn from '../LoggedIn';
+import { useAppState, AppStateProvider } from '../../contexts/app-context';
 
 function App() {
   const {

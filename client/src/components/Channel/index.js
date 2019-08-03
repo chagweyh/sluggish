@@ -1,40 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import ChannelInfo from './ChannelInfo';
-import Messages from './Messages';
-import styled, { css } from 'styled-components/macro';
-import MessageInput from './MessageInput';
-import socket from '../helpers/socket';
 import { Placeholder } from 'semantic-ui-react';
-import ChannelDetails from './ChannelDetails';
-import { getChannel } from '../API/ChannelsAPI';
-
-const PlaceholderExample = () => (
-  <Placeholder>
-    <Placeholder.Line />
-    <Placeholder.Line />
-    <Placeholder.Line />
-    <Placeholder.Line />
-  </Placeholder>
-);
-
-const StyledChannel = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-`;
-
-const ChannelContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  justify-content: flex-end;
-  ${(props) =>
-    props.details &&
-    css`
-      flex-basis: 75%;
-    `};
-`;
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
+import styled from '@emotion/styled';
+import Messages from '../Messages';
+import ChannelInfo from '../ChannelInfo';
+import MessageInput from '../MessageInput';
+import ChannelDetails from '../ChannelDetails';
+import socket from '../../helpers/socket';
+import { getChannel } from '../../API/ChannelsAPI';
 
 function Channel({ slug, user }) {
   const [channel, setChannel] = useState(null);
@@ -98,9 +72,9 @@ function Channel({ slug, user }) {
   }
 
   return isLoading ? (
-    <PlaceholderExample />
+    <ChannelLoading />
   ) : (
-    <StyledChannel>
+    <div>
       <ChannelInfo
         channel={channel}
         details={details}
@@ -108,10 +82,10 @@ function Channel({ slug, user }) {
         user={user}
       />
       <div
-        css={`
+        css={css`
           display: flex;
           flex-direction: row;
-          height: inherit;
+          height: calc(100vh - 65px);
         `}
       >
         <ChannelContent details={details}>
@@ -122,8 +96,27 @@ function Channel({ slug, user }) {
           <ChannelDetails channel={channel} handleClick={toggleDetails} />
         )}
       </div>
-    </StyledChannel>
+    </div>
   );
 }
+
+const ChannelLoading = () => (
+  <Placeholder>
+    <Placeholder.Line />
+    <Placeholder.Line />
+    <Placeholder.Line />
+    <Placeholder.Line />
+  </Placeholder>
+);
+
+const ChannelContent = styled.div`
+  flex-basis: 100%;
+
+  ${(props) =>
+    props.details &&
+    css`
+      flex-basis: 75%;
+    `};
+`;
 
 export default Channel;

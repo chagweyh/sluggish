@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-import { FormContainer, FormWrapper } from './styles/Form';
+import { FormContainer, FormWrapper } from '../styles/Form';
 
 const Reset = () => (
   <FormContainer>

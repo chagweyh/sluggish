@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-import { Form } from 'semantic-ui-react';
-import styled from 'styled-components/macro';
-import socket from '../helpers/socket';
-import { addMessage } from '../API/ChannelsAPI';
+import styled from '@emotion/styled';
+import socket from '../../helpers/socket';
+import { addMessage } from '../../API/ChannelsAPI';
 
-export default function MessageInput({ channel, user }) {
+function MessageInput({ channel, user }) {
   const input = useRef(null);
   let timeout;
 
@@ -18,8 +17,8 @@ export default function MessageInput({ channel, user }) {
         message,
         sentFrom: channel.slug,
       });
-    } catch (error) {
-      console.log(error.message);
+    } catch (err) {
+      console.log(err.message);
     }
     input.current.value = '';
   };
@@ -44,13 +43,23 @@ export default function MessageInput({ channel, user }) {
         name="message"
         ref={input}
         onChange={handleChange}
-        placeholder="Type your message here. Press Enter to send"
+        placeholder={`Message #${channel.name}`}
       />
     </MessageForm>
   );
 }
 
-const MessageForm = styled(Form)`
+const MessageForm = styled.form`
   padding: 9px;
   border-top: 1px solid #e8e4e4;
+  input {
+    width: 100%;
+    padding: 8px;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+  }
 `;
+
+export default MessageInput;

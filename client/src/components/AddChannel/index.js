@@ -8,7 +8,7 @@ import {
   Form,
   Checkbox,
 } from 'semantic-ui-react';
-import { addChannel } from '../API/ChannelsAPI';
+import { addChannel } from '../../API/ChannelsAPI';
 
 function AddChannel({ users, handleAddChannel }) {
   const [open, setOpen] = useState(false);
@@ -42,8 +42,8 @@ function AddChannel({ users, handleAddChannel }) {
       setForm(formInitialState);
       setOpen(false);
       handleAddChannel(channel);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   };
 

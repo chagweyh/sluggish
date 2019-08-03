@@ -25,7 +25,7 @@ export async function getChannels(req, res) {
 }
 
 export async function deleteChannel(req, res) {
-  const channel = await Channel.findOne({ slug: req.params.slug });
+  const channel = await Channel.findOne({ _id: req.params.id });
 
   if (!channel)
     return res.status(404).send('the channel with the given id was not found');
@@ -39,12 +39,6 @@ export async function deleteChannel(req, res) {
 }
 
 export async function starChannel(req, res) {
-  // const channelId = req.params.id;
-  // const channel = await Channel.findOne({ _id: channelId });
-
-  // if (!channel)
-  //   return res.status(404).send('the channel with the given id was not found');
-
   let user = await User.findOne({ _id: req.user._id });
 
   const stars = user.stars.map((obj) => obj.toString());

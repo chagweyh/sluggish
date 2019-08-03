@@ -1,14 +1,18 @@
 {
-  "name": "mini-slack-api",
+  "name": "sluggish-api",
   "version": "0.1.0",
   "private": true,
+  "repository": "https://github.com/chagweyh/sluggish/server",
+  "author": "Haythem Chagwey",
+  "license": "MIT",
   "main": "src/server.js",
   "scripts": {
     "build": "babel src -d build",
-    "start": "npm run build && nodemon build/server.js",
-    "serve": "npm run build && node build/server.js",
+    "start": "yarn build && nodemon build/server.js",
+    "serve": "yarn build && node build/server.js",
     "test": "jest",
-    "debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
+    "debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "deploy": "./scripts/deploy.sh"
   },
   "husky": {
     "hooks": {

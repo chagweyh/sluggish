@@ -1,9 +1,8 @@
-import styled from 'styled-components/macro';
+import styled from '@emotion/styled';
 
 const FormContainer = styled.div`
-  height: 100%;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -11,7 +10,7 @@ const FormContainer = styled.div`
 
 const FormWrapper = styled.div`
   width: 450px;
-  max-width: 90%;
+  /* max-width: 90%; */
 `;
 
 export { FormContainer, FormWrapper };

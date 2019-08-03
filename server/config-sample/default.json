@@ -1,5 +1,5 @@
 {
   "db": "mongodb://user:pass@host.com:port/database",
   "port": "8080",
-  "jwt_key": "12345"
+  "jwtKey": "12345"
 }

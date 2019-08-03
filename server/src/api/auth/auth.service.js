@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 
-const JWT_KEY = config.get('jwt_key');
+const JWT_KEY = config.get('jwtKey');
 const SALT_ROUNDS = 10;
 
 export async function encryptPassword(password) {

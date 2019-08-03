@@ -1,21 +1,10 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components/macro';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
+import styled from '@emotion/styled';
 import { Popup, Icon, Input, Dropdown } from 'semantic-ui-react';
-import { useAppState } from '../contexts/user';
-import { starChannel } from '../API/ChannelsAPI';
-
-const StyledInfo = styled.div`
-  position: sticky;
-  padding: 10px 20px;
-  border-bottom: 1px solid #e8e4e4;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  @media (max-width: 500px) {
-    flex-direction: column;
-    justify-content: center;
-  }
-`;
+import { useAppState } from '../../contexts/app-context';
+import { starChannel } from '../../API/ChannelsAPI';
 
 function ChannelInfo({ channel, details, handleClick }) {
   const {
@@ -33,8 +22,8 @@ function ChannelInfo({ channel, details, handleClick }) {
         : dispatch({ type: 'STAR_CHANNEL', channel: channel.id });
       setStarred(!starred);
       await starChannel(channel.id);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -46,7 +35,7 @@ function ChannelInfo({ channel, details, handleClick }) {
     <StyledInfo>
       <div>
         <h3
-          css={`
+          css={css`
             margin-right: 5px;
             margin-bottom: 0;
           `}
@@ -95,5 +84,18 @@ function ChannelInfo({ channel, details, handleClick }) {
     </StyledInfo>
   );
 }
+
+const StyledInfo = styled.div`
+  height: 65px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e8e4e4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @media (max-width: 500px) {
+    flex-direction: column;
+    justify-content: center;
+  }
+`;
 
 export default ChannelInfo;

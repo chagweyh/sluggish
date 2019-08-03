@@ -16,6 +16,7 @@ export async function validateForm(form, schema) {
   try {
     await schema.validate(form, { abortEarly: false });
   } catch (errors) {
+    console.log(errors);
     return errors.inner.map((error) => error.message);
   }
 }

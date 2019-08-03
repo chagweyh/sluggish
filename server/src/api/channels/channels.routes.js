@@ -17,12 +17,12 @@ const router = express.Router();
 router.get('/', getChannels);
 router.get('/:slug', getChannel);
 router.post('/', [isAuthenticated, validate(validateChannel)], addChannel);
-router.post('/:id/star', isAuthenticated, starChannel);
+router.post('/:id/star', [isAuthenticated, validateObjectId], starChannel);
 router.post(
   '/:id/messages',
   [isAuthenticated, validateObjectId, validate(validateMessage)],
   addMessage,
 );
-router.delete('/:slug', isAuthenticated, deleteChannel);
+router.delete('/:id', [isAuthenticated, validateObjectId], deleteChannel);
 
 export default router;
